@@ -1,0 +1,93 @@
+---
+export interface Property {
+    id: string;
+    code: string;
+    name: string;
+    description: string;
+    value_property: string;
+    area: string;
+    bedroom: string;
+    bathroom: string;
+    category: string;
+    status: string;
+    city: string;
+    images: string[];
+    features: string[];
+}
+
+interface Props {
+    property: Property;
+}
+
+const { property } = Astro.props;
+
+// Normalizar la imagen para que use la ruta correcta de storage de Laravel
+const mainImage = property.images && property.images.length > 0 
+    ? `https://orcic.mx/storage/${property.images[0]}`
+    : 'https://via.placeholder.com/800x600?text=Sin+Imagen';
+
+// Formateador de precio
+const formatter = new Intl.NumberFormat('es-MX', {
+  style: 'currency',
+  currency: 'MXN',
+});
+---
+
+<div class="md:col-span-4 bg-white rounded-xl overflow-hidden relative group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300">
+    <div class="relative h-64 overflow-hidden">
+        <img 
+            src={mainImage} 
+            alt={property.name}
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+        />
+        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+        <div class="absolute top-4 left-4">
+            <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-orcic-blue text-white">
+                {property.status}
+            </span>
+        </div>
+        <div class="absolute top-4 right-4">
+            <span class="bg-white/90 backdrop-blur-sm text-slate-900 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                {property.category}
+            </span>
+        </div>
+    </div>
+    
+    <div class="p-6">
+        <div class="flex justify-between items-start mb-2">
+            <h4 class="text-xl font-bold font-['Manrope'] text-slate-800 line-clamp-1">{property.name}</h4>
+            <span class="material-symbols-outlined text-slate-400 group-hover:text-orcic-blue transition-colors">favorite</span>
+        </div>
+        
+        <p class="text-orcic-blue font-bold text-lg mb-4">
+            {formatter.format(parseFloat(property.value_property))}
+        </p>
+        
+        <div class="flex items-center gap-2 text-slate-500 text-sm mb-6 pb-6 border-b border-slate-100">
+            <span class="material-symbols-outlined text-sm">location_on</span>
+            <span class="line-clamp-1">{property.city}</span>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-4 text-slate-600 text-sm font-medium">
+            <div class="flex flex-col items-center gap-1">
+                <span class="material-symbols-outlined text-slate-400">bed</span>
+                <span>{property.bedroom} Rec.</span>
+            </div>
+            <div class="flex flex-col items-center gap-1">
+                <span class="material-symbols-outlined text-slate-400">bathtub</span>
+                <span>{property.bathroom} Baños</span>
+            </div>
+            <div class="flex flex-col items-center gap-1">
+                <span class="material-symbols-outlined text-slate-400">square_foot</span>
+                <span>{property.area} m²</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón flotante al hover -->
+    <div class="absolute bottom-4 left-6 right-6 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+        <a href={`/propiedad/${property.code}`} class="w-full bg-slate-900 text-white text-center py-3 rounded-lg font-bold block shadow-2xl">
+            Ver Detalles
+        </a>
+    </div>
+</div>
