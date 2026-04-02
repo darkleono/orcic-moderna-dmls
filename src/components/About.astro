@@ -53,7 +53,7 @@
                     </video>
 
                     <!-- Semi-glass Controls Overlay -->
-                    <div id="video-controls" class="absolute bottom-6 left-6 right-6 flex items-center justify-between px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl opacity-80 group-hover:opacity-100 transition-all duration-500 z-30 transform group-hover:translate-y-0">
+                    <div id="video-controls" class="absolute bottom-6 left-6 right-6 flex items-center justify-between px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl opacity-0 transition-all duration-500 z-30">
                         <div class="flex items-center gap-5">
                             <button id="ctrl-play" class="text-white hover:scale-110 transition-transform flex items-center">
                                 <span class="material-symbols-outlined fill-current text-2xl" id="play-icon-main">play_arrow</span>
@@ -91,6 +91,7 @@
 <script>
     const video = document.getElementById('video-about') as HTMLVideoElement;
     const container = document.getElementById('video-container');
+    const controls = document.getElementById('video-controls');
     const playBtn = document.getElementById('ctrl-play');
     const playIcon = document.getElementById('play-icon-main');
     const centerBtn = document.getElementById('center-btn');
@@ -100,10 +101,30 @@
     const fullscreenBtn = document.getElementById('ctrl-fullscreen');
     const clickOverlay = document.getElementById('video-click-overlay');
 
-    if (video && container) {
+    if (video && container && controls) {
         let loopCount = 0;
         const maxLoops = 3;
+        let hideTimeout: number;
         video.volume = 0.5;
+
+        // --- LÓGICA DE AUTO-OCULTADO ---
+        const showControls = () => {
+            controls.classList.remove('opacity-0');
+            controls.classList.add('opacity-100');
+            
+            clearTimeout(hideTimeout);
+            
+            // Solo auto-ocultar si el video está reproduciéndose
+            if (!video.paused) {
+                hideTimeout = window.setTimeout(() => {
+                    controls.classList.add('opacity-0');
+                    controls.classList.remove('opacity-100');
+                }, 3000);
+            }
+        };
+
+        container.addEventListener('mousemove', showControls);
+        container.addEventListener('mouseenter', showControls);
 
         // 1. Intersection Observer para Autoplay cuando se ve
         const observer = new IntersectionObserver((entries) => {
@@ -125,9 +146,11 @@
             if (video.paused) {
                 video.play();
                 updateUIState(true);
+                showControls();
             } else {
                 video.pause();
                 updateUIState(false);
+                showControls();
             }
         };
 
@@ -149,26 +172,33 @@
             }
         };
 
-        playBtn?.addEventListener('click', togglePlay);
+        playBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePlay();
+        });
         clickOverlay?.addEventListener('click', togglePlay);
 
         // 3. Volume Control
-        volumeBtn?.addEventListener('click', () => {
+        volumeBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
             video.muted = !video.muted;
             if (volumeIcon) {
                 volumeIcon.innerText = video.muted ? 'volume_off' : 'volume_up';
             }
+            showControls();
         });
 
         // 4. Fullscreen
-        fullscreenBtn?.addEventListener('click', () => {
+        fullscreenBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (!document.fullscreenElement) {
                 container.requestFullscreen().catch(err => {
-                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    console.error(`Error en fullscreen: ${err.message}`);
                 });
             } else {
                 document.exitFullscreen();
             }
+            showControls();
         });
 
         // 5. Loop Counter (Máximo 3)
@@ -180,19 +210,18 @@
             } else {
                 video.pause();
                 updateUIState(false);
+                showControls();
             }
         });
 
         // Sincronización de UI con eventos de video
-        video.addEventListener('play', () => updateUIState(true));
-        video.addEventListener('pause', () => updateUIState(false));
-
-        // Al iniciar, si está en autoplay muted, ocultar el botón central
-        video.addEventListener('playing', () => {
-             if (video.muted) {
-                 // Si se reproduce solo en modo muted, mantenemos el botón central visible o no dependiendo del gusto
-                 // El usuario quiere controles visibles.
-             }
+        video.addEventListener('play', () => {
+            updateUIState(true);
+            showControls();
+        });
+        video.addEventListener('pause', () => {
+            updateUIState(false);
+            showControls();
         });
     }
 </script>
