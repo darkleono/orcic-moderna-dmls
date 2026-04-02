@@ -39,19 +39,12 @@
 
             <!-- Bloque de Video -->
             <div class="lg:w-1/2 relative" data-aos="fade-left">
-                <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl bg-slate-900 aspect-video group">
-                    <!-- Thumbnail de respaldo -->
-                    <img 
-                        src="https://orcic.mx/home/img/img2/12.jpg" 
-                        alt="Respaldo Video" 
-                        class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-1000"
-                    />
+                <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl bg-slate-900 aspect-video group" id="video-container">
                     
                     <!-- Video Real de ORCIC -->
                     <video 
                         id="video-about"
                         class="absolute inset-0 w-full h-full object-cover"
-                        autoplay 
                         muted 
                         playsinline
                     >
@@ -59,13 +52,29 @@
                         Tu navegador no soporta el video.
                     </video>
 
-                    <!-- Overlay Stitch -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-orcic-blue/40 to-transparent"></div>
-                    
-                    <!-- Botón de Play (Interactivo) -->
-                    <div id="video-control" class="absolute inset-0 flex items-center justify-center cursor-pointer z-20 group-hover:opacity-100 transition-opacity">
-                        <div class="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform duration-500">
-                            <span id="play-icon" class="material-symbols-outlined text-white text-4xl fill-current">play_arrow</span>
+                    <!-- Semi-glass Controls Overlay -->
+                    <div id="video-controls" class="absolute bottom-6 left-6 right-6 flex items-center justify-between px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 z-30 transform translate-y-2 group-hover:translate-y-0">
+                        <div class="flex items-center gap-5">
+                            <button id="ctrl-play" class="text-white hover:scale-110 transition-transform flex items-center">
+                                <span class="material-symbols-outlined fill-current text-2xl" id="play-icon-main">play_arrow</span>
+                            </button>
+                            <div class="h-4 w-px bg-white/20"></div>
+                            <button id="ctrl-volume" class="text-white hover:scale-110 transition-transform flex items-center">
+                                <span class="material-symbols-outlined text-2xl" id="volume-icon">volume_off</span>
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center gap-5">
+                            <button id="ctrl-fullscreen" class="text-white hover:scale-110 transition-transform flex items-center">
+                                <span class="material-symbols-outlined text-2xl">fullscreen</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Overlay central para click (Play gigante suave) -->
+                    <div id="video-click-overlay" class="absolute inset-0 flex items-center justify-center cursor-pointer z-20 transition-all duration-500">
+                        <div id="center-btn" class="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 scale-90 opacity-0 transition-all duration-500">
+                             <span id="center-play-icon" class="material-symbols-outlined text-white text-4xl fill-current">play_arrow</span>
                         </div>
                     </div>
                 </div>
@@ -81,58 +90,109 @@
 
 <script>
     const video = document.getElementById('video-about') as HTMLVideoElement;
-    const playBtn = document.getElementById('video-control');
-    const playIcon = document.getElementById('play-icon');
+    const container = document.getElementById('video-container');
+    const playBtn = document.getElementById('ctrl-play');
+    const playIcon = document.getElementById('play-icon-main');
+    const centerBtn = document.getElementById('center-btn');
+    const centerIcon = document.getElementById('center-play-icon');
+    const volumeBtn = document.getElementById('ctrl-volume');
+    const volumeIcon = document.getElementById('volume-icon');
+    const fullscreenBtn = document.getElementById('ctrl-fullscreen');
+    const clickOverlay = document.getElementById('video-click-overlay');
 
-    if (video && playBtn && playIcon) {
-        // Configuración inicial
-        video.volume = 0.5;
+    if (video && container) {
         let loopCount = 0;
         const maxLoops = 3;
+        video.volume = 0.5;
 
-        playBtn.addEventListener('click', () => {
-            if (video.muted) {
-                video.muted = false;
-                video.play();
-                playIcon.innerText = 'pause';
-                playBtn.classList.add('opacity-0');
-            } else {
-                if (video.paused) {
-                    video.play();
-                    playIcon.innerText = 'pause';
-                    playBtn.classList.add('opacity-0');
+        // 1. Intersection Observer para Autoplay cuando se ve
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (loopCount < maxLoops) {
+                        video.play().catch(() => console.log("Playback prevented by browser"));
+                    }
                 } else {
                     video.pause();
-                    playIcon.innerText = 'play_arrow';
-                    playBtn.classList.remove('opacity-0');
                 }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(video);
+
+        // 2. Play / Pause Logic
+        const togglePlay = () => {
+            if (video.paused) {
+                video.play();
+                updateUIState(true);
+            } else {
+                video.pause();
+                updateUIState(false);
+            }
+        };
+
+        const updateUIState = (playing: boolean) => {
+            if (playing) {
+                if (playIcon) playIcon.innerText = 'pause';
+                if (centerIcon) centerIcon.innerText = 'pause';
+                if (centerBtn) {
+                    centerBtn.classList.add('opacity-0', 'scale-110');
+                    centerBtn.classList.remove('opacity-100', 'scale-90');
+                }
+            } else {
+                if (playIcon) playIcon.innerText = 'play_arrow';
+                if (centerIcon) centerIcon.innerText = 'play_arrow';
+                if (centerBtn) {
+                    centerBtn.classList.remove('opacity-0', 'scale-110');
+                    centerBtn.classList.add('opacity-100', 'scale-90');
+                }
+            }
+        };
+
+        playBtn?.addEventListener('click', togglePlay);
+        clickOverlay?.addEventListener('click', togglePlay);
+
+        // 3. Volume Control
+        volumeBtn?.addEventListener('click', () => {
+            video.muted = !video.muted;
+            if (volumeIcon) {
+                volumeIcon.innerText = video.muted ? 'volume_off' : 'volume_up';
             }
         });
 
-        // Control de loops (máximo 3 veces)
+        // 4. Fullscreen
+        fullscreenBtn?.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // 5. Loop Counter (Máximo 3)
         video.addEventListener('ended', () => {
             loopCount++;
             if (loopCount < maxLoops) {
                 video.currentTime = 0;
                 video.play();
             } else {
-                // Se detiene después de la 3ra vez
-                playIcon.innerText = 'play_arrow';
-                playBtn.classList.remove('opacity-0');
+                video.pause();
+                updateUIState(false);
             }
         });
 
-        // Mostrar botón al entrar al video si está con sonido o pausado
-        video.addEventListener('mouseenter', () => {
-            if (!video.muted || video.paused) {
-                playBtn.classList.remove('opacity-0');
-            }
-        });
+        // Sincronización de UI con eventos de video
+        video.addEventListener('play', () => updateUIState(true));
+        video.addEventListener('pause', () => updateUIState(false));
 
-        // Asegurar que si el video se pausa por otra razón, el botón se vea
-        video.onpause = () => {
-            playIcon.innerText = 'play_arrow';
-            playBtn.classList.remove('opacity-0');
-        };
+        // Al iniciar, si está en autoplay muted, ocultar el botón central
+        video.addEventListener('playing', () => {
+             if (video.muted) {
+                 // Si se reproduce solo en modo muted, mantenemos el botón central visible o no dependiendo del gusto
+                 // El usuario quiere controles visibles.
+             }
+        });
     }
 </script>
