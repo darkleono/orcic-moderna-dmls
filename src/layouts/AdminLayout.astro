@@ -1,0 +1,103 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+
+const menuItems = [
+    { label: 'Dashboard', icon: 'dashboard', href: '/admin' },
+    { label: 'Propiedades', icon: 'home_work', href: '/admin/properties' },
+    { label: 'Desarrollos', icon: 'apartment', href: '/admin/developments' },
+    { label: 'Contenidos', icon: 'edit_note', href: '/admin/content' },
+    { label: 'Blog', icon: 'article', href: '/admin/blog' },
+];
+---
+
+<!doctype html>
+<html lang="es" class="light">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title} | Admin ORCIC</title>
+		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+	</head>
+	<body class="bg-slate-50 font-['Inter'] text-slate-900 antialiased overflow-hidden h-screen flex">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-[#0b213b] text-white flex flex-col border-r border-white/5 relative z-50">
+            <div class="h-24 flex items-center px-10 border-b border-white/5">
+                <img src="/logo_orcic.png" alt="ORCIC" class="h-10 w-auto invert brightness-0" />
+            </div>
+            
+            <nav class="flex-1 py-8 px-6 space-y-2">
+                {menuItems.map(item => (
+                    <a href={item.href} class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-slate-400 hover:text-white group">
+                        <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
+                        <span class="text-sm font-semibold tracking-tight">{item.label}</span>
+                    </a>
+                ))}
+            </nav>
+
+            <div class="p-8 border-t border-white/5 bg-[#0b213b]">
+                <div class="flex items-center gap-4 px-2">
+                    <div class="w-10 h-10 rounded-full bg-[#007bff] flex items-center justify-center font-bold shadow-lg shadow-[#007bff]/20">A</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold">Administrador</span>
+                        <a href="/" class="text-[10px] text-slate-500 uppercase tracking-widest font-black hover:text-[#007bff] transition-colors">Volver al Sitio</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="h-24 bg-white border-b border-slate-200 flex items-center justify-between px-12 shrink-0 z-40">
+                <div class="flex flex-col">
+                    <span class="text-[9px] uppercase tracking-[0.3em] text-slate-400 font-black mb-1">Panel Administrativo</span>
+                    <h1 class="text-2xl font-['Manrope'] font-black tracking-tight text-slate-900 leading-none">{title}</h1>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-2">
+                         <button class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 hover:border-[#007bff] hover:text-[#007bff] transition-all">
+                            <span class="material-symbols-outlined">notifications</span>
+                        </button>
+                        <button class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 hover:border-[#007bff] hover:text-[#007bff] transition-all">
+                            <span class="material-symbols-outlined">settings</span>
+                        </button>
+                    </div>
+                    <button class="bg-[#0b213b] text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-3 hover:bg-[#007bff] transition-all text-xs uppercase tracking-widest shadow-xl shadow-[#0b213b]/10 active:scale-95">
+                        <span class="material-symbols-outlined text-lg">add_circle</span>
+                        Nuevo Registro
+                    </button>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-12 bg-slate-50/50">
+                <slot />
+            </main>
+        </div>
+
+		<style is:global>
+			.material-symbols-outlined {
+				font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+			}
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: #f1f5f9;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+		</style>
+	</body>
+</html>

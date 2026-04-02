@@ -1,0 +1,107 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+// FETCH DATA FOR STATS
+let properties = [];
+try {
+    const response = await fetch('https://orcic.mx/api-properties.php');
+    properties = await response.json();
+    if ('error' in properties) properties = [];
+} catch (e) {
+    properties = [];
+}
+
+const stats = [
+    { label: 'Propiedades Totales', value: properties.length, icon: 'home_work', color: 'blue' },
+    { label: 'Desarrollos Activos', value: '12', icon: 'apartment', color: 'indigo' },
+    { label: 'Leads Recientes', value: '48', icon: 'group', color: 'emerald' },
+    { label: 'Visitas (Mes)', value: '1.2k', icon: 'trending_up', color: 'amber' },
+];
+
+const recentProperties = properties.slice(0, 5);
+---
+
+<AdminLayout title="Dashboard">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        {stats.map(stat => (
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
+                <div class="flex justify-between items-start mb-6">
+                    <div class={`w-14 h-14 rounded-2xl bg-${stat.color}-500/10 flex items-center justify-center text-${stat.color}-600 group-hover:scale-110 transition-transform duration-500`}>
+                        <span class="material-symbols-outlined text-3xl font-black">{stat.icon}</span>
+                    </div>
+                </div>
+                <p class="text-slate-400 text-[10px] uppercase tracking-[0.2em] font-black mb-1">{stat.label}</p>
+                <h3 class="text-4xl font-['Manrope'] font-black text-slate-900 tracking-tighter">{stat.value}</h3>
+            </div>
+        ))}
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Recent Properties Table -->
+        <div class="lg:col-span-2 bg-white rounded-[3rem] border border-slate-100 shadow-sm p-10 overflow-hidden">
+            <div class="flex items-center justify-between mb-10 px-2">
+                <h2 class="text-xl font-['Manrope'] font-black text-slate-900 tracking-tight flex items-center gap-4">
+                    Inventario Reciente
+                    <span class="px-3 py-1 bg-slate-50 border border-slate-100 text-slate-400 text-[10px] rounded-full">Actualizado hoy</span>
+                </h2>
+                <a href="/admin/properties" class="text-xs font-black text-[#007bff] uppercase tracking-widest hover:underline">Ver Todo</a>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-slate-50">
+                            <th class="pb-6 text-[10px] uppercase tracking-widest font-black text-slate-400 px-2">Propiedad</th>
+                            <th class="pb-6 text-[10px] uppercase tracking-widest font-black text-slate-400 px-2">Ubicación</th>
+                            <th class="pb-6 text-[10px] uppercase tracking-widest font-black text-slate-400 px-2 text-right">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        {recentProperties.map(prop => (
+                            <tr class="group hover:bg-slate-50/50 transition-colors">
+                                <td class="py-6 px-2">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
+                                            {prop.image && <img src={prop.image} class="w-full h-full object-cover" />}
+                                        </div>
+                                        <span class="font-bold text-slate-900 text-sm max-w-[200px] truncate">{prop.title || prop.name || 'Sin título'}</span>
+                                    </div>
+                                </td>
+                                <td class="py-6 px-2">
+                                    <span class="text-slate-500 text-sm font-medium">{prop.city}</span>
+                                </td>
+                                <td class="py-6 px-2 text-right">
+                                    <a href={`/admin/properties/edit/${prop.id}`} class="w-10 h-10 rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#007bff] hover:border-[#007bff] transition-all bg-white shadow-sm">
+                                        <span class="material-symbols-outlined text-xl">edit</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick Content Editor -->
+        <div class="bg-[#0b213b] rounded-[3rem] p-10 text-white relative overflow-hidden shadow-2xl">
+            <div class="relative z-10 h-full flex flex-col">
+                <span class="material-symbols-outlined text-5xl text-[#007bff] mb-8 font-black">edit_note</span>
+                <h2 class="text-3xl font-['Manrope'] font-black tracking-tight leading-tight mb-6">Editor de <br/>Contenido Rápido</h2>
+                <p class="text-white/60 font-medium mb-10 text-sm leading-relaxed">Modifica los textos principales del Home y la trayectoria de ORCIC sin complicaciones.</p>
+                
+                <div class="space-y-4 mt-auto">
+                    <a href="/admin/content" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl flex items-center justify-between hover:bg-white/10 transition-all group">
+                        <span class="font-bold text-sm">Sección Nosotros</span>
+                        <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                    </a>
+                    <a href="/admin/developments" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl flex items-center justify-between hover:bg-white/10 transition-all group">
+                        <span class="font-bold text-sm">Bento de Desarrollos</span>
+                        <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Decorative circle -->
+            <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-[#007bff]/10 rounded-full blur-3xl"></div>
+        </div>
+    </div>
+</AdminLayout>

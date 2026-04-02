@@ -1,0 +1,115 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+// FETCH ALL DATA
+let properties = [];
+let error = null;
+try {
+    const response = await fetch('https://orcic.mx/api-properties.php');
+    if (!response.ok) throw new Error('Error al conectar con la API');
+    properties = await response.json();
+    if ('error' in properties) {
+        error = properties.error;
+        properties = [];
+    }
+} catch (e) {
+    error = e.message;
+    properties = [];
+}
+
+const locations = [...new Set(properties.map(p => p.city))].filter(Boolean).sort();
+const categories = [...new Set(properties.map(p => p.category))].filter(Boolean).sort();
+---
+
+<AdminLayout title="Catálogo de Propiedades">
+    <!-- Header Actions -->
+    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-8 px-2">
+        <div class="max-w-xl w-full">
+            <p class="text-orcic-blue font-black tracking-[0.3em] text-[10px] uppercase mb-4 block">Inventario de Bienes Raíces</p>
+            <div class="relative w-full">
+                <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input 
+                    type="text" 
+                    placeholder="Buscar por código, título o zona..." 
+                    class="w-full bg-white border border-slate-100 rounded-2xl py-5 pl-14 pr-8 text-sm font-medium focus:ring-0 focus:border-orcic-blue transition-all shadow-sm focus:shadow-xl"
+                />
+            </div>
+        </div>
+        <div class="flex gap-4">
+             <div class="bg-white p-1.5 rounded-xl border border-slate-100 flex shadow-sm">
+                <button class="px-6 py-2.5 bg-slate-900 text-white rounded-lg text-[10px] uppercase font-black tracking-widest shadow-lg">Todas</button>
+                <button class="px-6 py-2.5 text-slate-400 hover:text-slate-900 rounded-lg text-[10px] uppercase font-black tracking-widest transition-colors">Activas</button>
+                <button class="px-6 py-2.5 text-slate-400 hover:text-slate-900 rounded-lg text-[10px] uppercase font-black tracking-widest transition-colors">Archivadas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Table -->
+    <div class="bg-white rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden p-10">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-slate-50">
+                        <th class="pb-8 text-[10px] uppercase tracking-widest font-black text-slate-400 px-4">Info. Inmueble</th>
+                        <th class="pb-8 text-[10px] uppercase tracking-widest font-black text-slate-400 px-4">Ubicación</th>
+                        <th class="pb-8 text-[10px] uppercase tracking-widest font-black text-slate-400 px-4">Categoría</th>
+                        <th class="pb-8 text-[10px] uppercase tracking-widest font-black text-slate-400 px-4">Status</th>
+                        <th class="pb-8 text-[10px] uppercase tracking-widest font-black text-slate-400 px-4 text-right">Gestión</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    {properties.map(prop => (
+                        <tr class="group hover:bg-slate-50/50 transition-colors">
+                            <td class="py-8 px-4">
+                                <div class="flex items-center gap-5">
+                                    <div class="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 group-hover:scale-105 transition-transform">
+                                        <img src={prop.image || '/storage/placeholder.svg'} class="w-full h-full object-cover" />
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-[9px] uppercase font-black tracking-widest text-[#007bff] mb-1">{prop.code || 'S/C'}</span>
+                                        <span class="font-bold text-slate-900 text-base max-w-[280px] truncate leading-tight">{prop.title || prop.name}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-8 px-4">
+                                <div class="flex items-center gap-2 text-slate-500 font-medium text-sm">
+                                    <span class="material-symbols-outlined text-lg opacity-50">location_on</span>
+                                    {prop.city}
+                                </div>
+                            </td>
+                            <td class="py-8 px-4">
+                                <span class="px-4 py-1.5 bg-slate-100 border border-slate-200 text-slate-900 rounded-full text-[10px] font-black uppercase tracking-widest">{prop.category}</span>
+                            </td>
+                            <td class="py-8 px-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    <span class="text-xs font-bold text-slate-900">En Venta</span>
+                                </div>
+                            </td>
+                            <td class="py-8 px-4 text-right">
+                                <div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all">
+                                    <a href={`/admin/properties/edit/${prop.id}`} class="w-11 h-11 rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#007bff] hover:border-[#007bff] hover:shadow-lg transition-all bg-white">
+                                        <span class="material-symbols-outlined text-xl">edit</span>
+                                    </a>
+                                    <button class="w-11 h-11 rounded-xl border border-slate-100 flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-500 hover:shadow-lg transition-all bg-white">
+                                        <span class="material-symbols-outlined text-xl">delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+        
+        {properties.length === 0 && (
+            <div class="py-32 text-center">
+                <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300">
+                    <span class="material-symbols-outlined text-5xl">search_off</span>
+                </div>
+                <h3 class="text-xl font-['Manrope'] font-black text-slate-900">No hay propiedades que mostrar</h3>
+                <p class="text-slate-400 text-sm mt-3">{error || 'El inventario está vacío actualmente.'}</p>
+            </div>
+        )}
+    </div>
+</AdminLayout>

@@ -1,0 +1,99 @@
+---
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+
+export async function getStaticPaths() {
+    let properties = [];
+    try {
+        const response = await fetch('https://orcic.mx/api-properties.php');
+        properties = await response.json();
+        if ('error' in properties) properties = [];
+    } catch (e) {
+        properties = [];
+    }
+    
+    return properties.map((prop) => ({
+        params: { id: prop.id.toString() },
+        props: { property: prop },
+    }));
+}
+
+const { id } = Astro.params;
+const { property } = Astro.props;
+---
+
+<AdminLayout title={`Editar Propiedad: ${property.code || id}`}>
+    <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Sidebar Form Navigation (Optional but clean) -->
+            <div class="lg:w-1/3 flex flex-col gap-6">
+                <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-8 overflow-hidden sticky top-32">
+                    <div class="w-full aspect-[4/3] rounded-3xl bg-slate-100 overflow-hidden mb-6 border border-slate-200 group relative">
+                        <img src={property.image} alt={property.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <div class="absolute inset-0 bg-[#0b213b]/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                             <button class="bg-white text-slate-900 px-6 py-3 rounded-xl font-bold flex items-center gap-3 hover:bg-white/90 shadow-xl shadow-black/20 text-xs">
+                                <span class="material-symbols-outlined text-lg">image</span>
+                                Cambiar Imagen
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="p-5 bg-slate-50/50 border border-slate-100 rounded-2xl">
+                             <p class="text-[9px] uppercase tracking-[0.2em] text-slate-400 font-black mb-2">Código Único (No editable)</p>
+                             <p class="font-black text-slate-900 font-['Manrope'] tracking-tight text-xl">{property.code}</p>
+                        </div>
+                        <div class="p-5 bg-slate-50/50 border border-slate-100 rounded-2xl">
+                             <p class="text-[9px] uppercase tracking-[0.2em] text-slate-400 font-black mb-2">Última Modificación</p>
+                             <p class="font-bold text-slate-900 text-sm">{new Date().toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="lg:w-2/3 space-y-10">
+                <div class="bg-white rounded-[3rem] border border-slate-100 shadow-sm p-12 overflow-hidden shadow-2xl shadow-slate-200/50">
+                    <h3 class="text-xl font-['Manrope'] font-black text-slate-900 mb-10 pb-6 border-b border-slate-50 flex items-center gap-4">
+                        <span class="w-10 h-10 rounded-xl bg-orcic-blue/10 flex items-center justify-center text-orcic-blue">
+                            <span class="material-symbols-outlined text-xl">info</span>
+                        </span>
+                        Información General
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                        <div class="flex flex-col gap-3">
+                            <label class="text-[10px] uppercase font-black tracking-widest text-slate-400 ml-2">Título de la Propiedad</label>
+                            <input type="text" value={property.title || property.name} class="bg-slate-50/50 border border-slate-100 rounded-2xl py-4 px-6 text-sm font-semibold focus:ring-0 focus:border-orcic-blue focus:bg-white transition-all" />
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <label class="text-[10px] uppercase font-black tracking-widest text-slate-400 ml-2">Precio de Lista</label>
+                            <input type="text" placeholder="$0.00 MXN" class="bg-slate-50/50 border border-slate-100 rounded-2xl py-4 px-6 text-sm font-semibold focus:ring-0 focus:border-orcic-blue focus:bg-white transition-all" />
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <label class="text-[10px] uppercase font-black tracking-widest text-slate-400 ml-2">Ubicación (Ciudad)</label>
+                            <input type="text" value={property.city} class="bg-slate-50/50 border border-slate-100 rounded-2xl py-4 px-6 text-sm font-semibold focus:ring-0 focus:border-orcic-blue focus:bg-white transition-all" />
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <label class="text-[10px] uppercase font-black tracking-widest text-slate-400 ml-2">Categoría</label>
+                            <select class="bg-slate-50/50 border border-slate-100 rounded-2xl py-4 px-6 text-sm font-semibold focus:ring-0 focus:border-orcic-blue focus:bg-white transition-all appearance-none cursor-pointer">
+                                <option value={property.category}>{property.category}</option>
+                                <option value="Nave Industrial">Nave Industrial</option>
+                                <option value="Terreno Residencial">Terreno Residencial</option>
+                                <option value="Local Comercial">Local Comercial</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3 mb-10">
+                        <label class="text-[10px] uppercase font-black tracking-widest text-slate-400 ml-2">Descripción General del Inmueble</label>
+                        <textarea rows="6" class="bg-slate-50/50 border border-slate-100 rounded-3xl py-6 px-8 text-sm font-semibold focus:ring-0 focus:border-orcic-blue focus:bg-white transition-all resize-none"></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-6 pt-10 border-t border-slate-50">
+                        <a href="/admin/properties" class="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-colors">Cancelar</a>
+                        <button class="bg-[#0b213b] text-white px-10 py-4 rounded-xl font-bold hover:bg-[#007bff] transition-all text-xs uppercase tracking-widest shadow-xl shadow-[#0b213b]/10 active:scale-95">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</AdminLayout>
