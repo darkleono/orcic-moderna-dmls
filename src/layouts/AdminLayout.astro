@@ -26,60 +26,71 @@ const menuItems = [
 		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 	</head>
-	<body class="bg-slate-50 font-['Inter'] text-slate-900 antialiased overflow-hidden h-screen flex">
+	<body class="bg-at-surface font-['Inter'] text-on-surface antialiased overflow-hidden h-screen flex">
         <!-- Sidebar -->
-        <aside class="w-72 bg-[#0b213b] text-white flex flex-col border-r border-white/5 relative z-50">
-            <div class="h-24 flex items-center px-10 border-b border-white/5">
-                <img src="/logo_orcic.png" alt="ORCIC" class="h-10 w-auto invert brightness-0" />
+        <aside class="w-72 bg-at-surface-low text-on-surface flex flex-col relative z-50 border-r border-at-outline/20">
+            <div class="h-24 flex items-center px-10">
+                <span class="text-xl font-heading font-black tracking-tighter text-on-surface">EstateArchitect <span class="text-orcic-blue">.</span></span>
             </div>
             
-            <nav class="flex-1 py-8 px-6 space-y-2">
-                {menuItems.map(item => (
-                    <a href={item.href} class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-slate-400 hover:text-white group">
-                        <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">{item.icon}</span>
-                        <span class="text-sm font-semibold tracking-tight">{item.label}</span>
+            <!-- Profile Section -->
+            <div class="px-8 mb-10">
+                <div class="flex items-center gap-4 p-3 bg-at-surface-lowest rounded-2xl shadow-sm border border-at-outline/5 transition-transform hover:scale-[1.02] cursor-pointer">
+                    <div class="w-10 h-10 rounded-full bg-orcic-blue flex items-center justify-center font-bold text-white shadow-lg shadow-orcic-blue/20">A</div>
+                    <div class="flex flex-col overflow-hidden">
+                        <span class="text-sm font-bold text-on-surface truncate">Estate Admin</span>
+                        <span class="text-[10px] text-on-surface-variant font-medium">124 Propiedades</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-6 space-y-1">
+                {menuItems.map((item, index) => (
+                    <a href={item.href} class={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all group ${index === 0 ? 'bg-at-secondary/10 text-at-secondary shadow-sm' : 'text-on-surface-variant hover:bg-at-surface-lowest hover:text-on-surface'}`}>
+                        <span class={`material-symbols-outlined text-xl ${index === 0 ? 'font-bold' : 'group-hover:scale-110'} transition-transform`}>{item.icon}</span>
+                        <span class="text-sm font-bold tracking-tight">{item.label}</span>
                     </a>
                 ))}
             </nav>
 
-            <div class="p-8 border-t border-white/5 bg-[#0b213b]">
-                <div class="flex items-center gap-4 px-2">
-                    <div class="w-10 h-10 rounded-full bg-[#007bff] flex items-center justify-center font-bold shadow-lg shadow-[#007bff]/20">A</div>
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold">Administrador</span>
-                        <a href="/" class="text-[10px] text-slate-500 uppercase tracking-widest font-black hover:text-[#007bff] transition-colors">Volver al Sitio</a>
-                    </div>
+            <div class="p-8 space-y-4">
+                <button class="w-full bg-orcic-navy-deep text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-at-secondary transition-all shadow-xl shadow-orcic-navy-deep/10 active:scale-95 leading-none">
+                    <span class="material-symbols-outlined text-lg">add</span>
+                    New Listing
+                </button>
+                <div class="pt-4 border-t border-at-outline/20">
+                    <a href="/" class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-red-500 transition-colors group">
+                        <span class="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform">logout</span>
+                        <span class="text-xs font-bold uppercase tracking-widest">Logout</span>
+                    </a>
                 </div>
             </div>
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="h-24 bg-white border-b border-slate-200 flex items-center justify-between px-12 shrink-0 z-40">
+        <div class="flex-1 flex flex-col overflow-hidden bg-at-surface">
+            <header class="h-24 bg-at-surface flex items-center justify-between px-12 shrink-0 z-40">
                 <div class="flex flex-col">
-                    <span class="text-[9px] uppercase tracking-[0.3em] text-slate-400 font-black mb-1">Panel Administrativo</span>
-                    <h1 class="text-2xl font-['Manrope'] font-black tracking-tight text-slate-900 leading-none">{title}</h1>
+                    <h1 class="text-4xl font-heading font-black tracking-tight text-on-surface leading-none">{title}</h1>
+                    <p class="text-on-surface-variant text-sm mt-1 font-medium">Welcome back, your portfolio is performing 12% better this month.</p>
                 </div>
-                <div class="flex items-center gap-6">
-                    <div class="flex items-center gap-2">
-                         <button class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 hover:border-[#007bff] hover:text-[#007bff] transition-all">
-                            <span class="material-symbols-outlined">notifications</span>
-                        </button>
-                        <button class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 hover:border-[#007bff] hover:text-[#007bff] transition-all">
-                            <span class="material-symbols-outlined">settings</span>
-                        </button>
+                <div class="flex items-center gap-4">
+                    <div class="bg-at-surface-lowest px-4 py-2 rounded-xl flex items-center gap-3 border border-at-outline/10 shadow-sm">
+                        <span class="material-symbols-outlined text-on-surface-variant text-lg">calendar_today</span>
+                        <span class="text-[11px] font-bold text-on-surface uppercase tracking-tight">Oct 24 - Nov 24, 2024</span>
                     </div>
-                    <button class="bg-[#0b213b] text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-3 hover:bg-[#007bff] transition-all text-xs uppercase tracking-widest shadow-xl shadow-[#0b213b]/10 active:scale-95">
-                        <span class="material-symbols-outlined text-lg">add_circle</span>
-                        Nuevo Registro
+                    <button class="bg-at-secondary text-white px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 transition-opacity whitespace-nowrap">
+                        Download Report
                     </button>
                 </div>
             </header>
 
-            <main class="flex-1 overflow-y-auto p-12 bg-slate-50/50">
+            <main class="flex-1 overflow-y-auto p-12 pt-4 bg-at-surface">
                 <slot />
             </main>
         </div>
+
+
 
 		<style is:global>
 			.material-symbols-outlined {
