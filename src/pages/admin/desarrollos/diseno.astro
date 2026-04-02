@@ -1,0 +1,77 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+// Mock data for featured developments in bento
+const featuredDevelopments = [
+    { id: 1, name: "Mérida Heritage", size: "Large (8x2)", image: "https://orcic.mx/storage/merida.jpg" },
+    { id: 2, name: "Cancún Industrial", size: "Tall (4x4)", image: "https://orcic.mx/storage/cancun.jpg" },
+    { id: 3, name: "Tulum Eco-Space", size: "Square (4x2)", image: "https://orcic.mx/storage/tulum.jpg" },
+    { id: 4, name: "Valladolid Colonial", size: "Square (4x2)", image: "https://orcic.mx/storage/valladolid.jpg" }
+];
+---
+
+<AdminLayout title="Gestor de Diseño Bento">
+    <div class="max-w-6xl">
+        <!-- Back Link & Header -->
+        <div class="mb-12">
+            <a href="/admin/desarrollos" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0056b3] hover:translate-x-1 transition-transform mb-6">
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                Volver al Inventario
+            </a>
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div>
+                    <h2 class="text-4xl font-heading font-black text-slate-900 tracking-tighter italic leading-none">Diseño de Portada</h2>
+                    <p class="text-slate-400 font-bold text-xs mt-3 uppercase tracking-widest">Configuración Visual de Desarrollos • Estilo Bento</p>
+                </div>
+                <div class="flex gap-4">
+                    <button class="bg-white border border-slate-200 text-slate-500 px-6 py-3 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm">
+                        Reiniciar
+                    </button>
+                    <button class="bg-[#21ba70] text-white px-8 py-3 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 transition-all shadow-lg shadow-emerald-900/10">
+                        Publicar Diseño
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bento Visualizer (MOCK) -->
+        <div class="bg-white border border-slate-200 rounded-[2.5rem] p-10 mb-12 shadow-sm">
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-8 flex items-center gap-3">
+                <span class="material-symbols-outlined text-lg">grid_view</span>
+                Visualizador de Cuadrícula
+            </h3>
+            
+            <div class="grid grid-cols-12 gap-4 h-[450px]">
+                {/* Same Bento Visualizer Logic as before... */}
+                <div class="col-span-8 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center relative overflow-hidden group cursor-pointer hover:border-[#0056b3] transition-all">
+                    <img src={featuredDevelopments[0].image} class="absolute inset-0 w-full h-full object-cover opacity-20 grayscale brightness-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
+                    <div class="relative z-10 text-center">
+                        <span class="text-[9px] font-black uppercase tracking-widest px-4 py-1.5 bg-[#0056b3] text-white rounded-full mb-3 inline-block shadow-lg">Espacio 1 (Grande)</span>
+                        <p class="font-black text-2xl text-slate-900 group-hover:text-white transition-colors tracking-tight italic">{featuredDevelopments[0].name}</p>
+                    </div>
+                </div>
+                <div class="col-span-4 row-span-2 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center relative overflow-hidden group cursor-pointer hover:border-[#0056b3] transition-all">
+                    <img src={featuredDevelopments[1].image} class="absolute inset-0 w-full h-full object-cover opacity-20 grayscale brightness-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" />
+                    <div class="relative z-10 text-center p-6">
+                        <span class="text-[9px] font-black uppercase tracking-widest px-4 py-1.5 bg-[#0056b3] text-white rounded-full mb-3 inline-block shadow-lg">Espacio 2 (Alto)</span>
+                        <p class="font-black text-2xl text-slate-900 group-hover:text-white transition-colors tracking-tight italic">{featuredDevelopments[1].name}</p>
+                    </div>
+                </div>
+                {/* Extra slots... */}
+            </div>
+        </div>
+
+        <!-- Quick Slot Management -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredDevelopments.map((dev, i) => (
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm group hover:shadow-xl transition-all">
+                     <label class="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-4">Espacio {i+1}</label>
+                     <select class="w-full bg-slate-50 border border-slate-100 rounded-xl py-3 px-4 text-xs font-bold text-slate-900 outline-none focus:border-[#0056b3] transition-all">
+                        <option selected>{dev.name}</option>
+                        <option>Otro Desarrollo...</option>
+                     </select>
+                </div>
+            ))}
+        </div>
+    </div>
+</AdminLayout>

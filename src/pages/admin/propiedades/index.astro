@@ -1,0 +1,165 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+// FETCH ALL DATA
+let properties = [];
+let error = null;
+try {
+    const response = await fetch('https://orcic.mx/api-properties.php');
+    if (!response.ok) throw new Error('Error al conectar con la API');
+    properties = await response.json();
+    if ('error' in properties) {
+        error = properties.error;
+        properties = [];
+    }
+} catch (e) {
+    error = e.message;
+    properties = [];
+}
+
+const locations = [...new Set(properties.map(p => p.city))].filter(Boolean).sort();
+const categories = [...new Set(properties.map(p => p.category))].filter(Boolean).sort();
+---
+
+<AdminLayout title="Inventario">
+    <!-- Header Actions (STICH STYLE) -->
+    <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-8 px-2">
+        <div class="max-w-xl w-full">
+            <h1 class="text-4xl font-heading font-black text-slate-900 tracking-tighter leading-tight italic mb-6">Portafolio Global</h1>
+            <div class="relative w-full group">
+                <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#0056b3] transition-colors">search</span>
+                <input 
+                    id="propertySearch"
+                    type="text" 
+                    placeholder="Buscar por código, título o zona..." 
+                    class="w-full bg-white border border-slate-200 rounded-xl py-4 pl-14 pr-8 text-sm font-bold focus:ring-4 focus:ring-blue-100 focus:border-[#0056b3] outline-none transition-all placeholder:text-slate-300 shadow-sm"
+                />
+            </div>
+        </div>
+        <div class="flex gap-4 mb-1">
+             <div class="bg-white border border-slate-200 p-1.5 rounded-xl flex shadow-sm filter-container">
+                <button data-filter="todos" class="filter-btn px-6 py-2 bg-[#041627] text-white rounded-lg text-[10px] uppercase font-black tracking-widest shadow-lg transition-all">Todos</button>
+                <button data-filter="disponible" class="filter-btn px-6 py-2 text-slate-400 hover:text-slate-900 rounded-lg text-[10px] uppercase font-black tracking-widest transition-all font-bold">Publicados</button>
+                <button data-filter="borrador" class="filter-btn px-6 py-2 text-slate-400 hover:text-slate-900 rounded-lg text-[10px] uppercase font-black tracking-widest transition-all font-bold">Borradores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Properties Object List (STICH DENSITY) -->
+    <div class="space-y-4">
+        {properties.length > 0 ? (
+            <div class="overflow-x-auto pb-4">
+                <table class="w-full text-left border-separate border-spacing-y-3" id="propertiesTable">
+                    <thead>
+                        <tr class="text-[10px] uppercase tracking-[0.2em] font-black text-slate-400">
+                            <th class="pb-3 px-6">Objeto Arquitectónico</th>
+                            <th class="pb-3 px-6">Ubicación</th>
+                            <th class="pb-3 px-6">Estado</th>
+                            <th class="pb-3 px-6 text-right">Gestión</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {properties.map((prop, index) => {
+                            // Mocking some drafts for testing logic
+                            const status = index % 3 === 0 ? 'borrador' : 'disponible';
+                            return (
+                                <tr class="group property-row" data-status={status}>
+                                    <td class="py-5 px-6 bg-white border-y border-l border-slate-200 first:rounded-l-2xl group-hover:bg-[#f8fafc] transition-colors shadow-sm group-hover:shadow-md">
+                                        <div class="flex items-center gap-6">
+                                            <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-slate-100 relative group-hover:scale-105 transition-transform duration-700 shadow-sm">
+                                                <img src={prop.image || 'https://images.unsplash.com/photo-1600585154340-be6199fbf895?auto=format&fit=crop&w=300&q=80'} class="w-full h-full object-cover" />
+                                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="text-[10px] uppercase font-black text-[#0056b3] tracking-widest mb-1">ID • {prop.code || `ORC-00${index+1}`}</span>
+                                                <span class="font-black text-slate-900 text-lg max-w-[320px] truncate leading-none tracking-tight">{prop.title || prop.name}</span>
+                                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Arquitectura • {prop.category}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 bg-white border-y border-slate-200 group-hover:bg-[#f8fafc] transition-colors shadow-sm group-hover:shadow-md">
+                                        <div class="flex items-center gap-3 text-slate-600 font-bold text-sm">
+                                            <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                                            {prop.city}
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 bg-white border-y border-slate-200 group-hover:bg-[#f8fafc] transition-colors shadow-sm group-hover:shadow-md">
+                                        <span class={`px-4 py-2 border rounded-lg text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 ${status === 'disponible' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-slate-50 border-slate-100 text-slate-400'}`}>
+                                            <div class={`w-1.5 h-1.5 rounded-full ${status === 'disponible' ? 'bg-emerald-500' : 'bg-slate-400'}`}></div>
+                                            {status === 'disponible' ? 'Publicado' : 'Borrador'}
+                                        </span>
+                                    </td>
+                                    <td class="py-5 px-6 bg-white border-y border-r border-slate-200 first:rounded-r-2xl group-hover:bg-[#f8fafc] transition-colors shadow-sm group-hover:shadow-md text-right">
+                                        <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all translate-x-2 group-hover:translate-x-0">
+                                            <a href={`/admin/propiedades/edit/${prop.id}`} class="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#0056b3] hover:shadow-lg hover:border-[#0056b3]/50 transition-all">
+                                                <span class="material-symbols-outlined text-lg">edit</span>
+                                            </a>
+                                            <button class="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-red-600 hover:shadow-lg hover:border-red-200 transition-all" title="Eliminar">
+                                                <span class="material-symbols-outlined text-lg">delete</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        ) : (
+            <div class="py-32 text-center bg-white border border-slate-200 rounded-3xl shadow-sm">
+                <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-200">
+                    <span class="material-symbols-outlined text-5xl">inventory_2</span>
+                </div>
+                <h3 class="text-xl font-heading font-black text-slate-900 italic">No se encontraron objetos arquitectónicos</h3>
+                <p class="text-slate-400 text-sm mt-3 max-w-xs mx-auto font-medium">{error || 'Tu portafolio está esperando nuevos desarrollos.'}</p>
+                <button class="mt-8 bg-[#0056b3] text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-900/20">
+                    Añadir primera propiedad
+                </button>
+            </div>
+        )}
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('propertySearch');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const rows = document.querySelectorAll('.property-row');
+
+        // Filter Logic
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.bg-\\[\\#041627\\]').dataset.filter;
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                const status = row.dataset.status;
+                const matchesSearch = text.includes(searchTerm);
+                const matchesFilter = activeFilter === 'todos' || status === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    row.classList.remove('hidden');
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+        }
+
+        // Search Event
+        searchInput.addEventListener('input', applyFilters);
+
+        // Category Filter Event
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-[#041627]', 'text-white', 'shadow-lg');
+                    b.classList.add('text-slate-400', 'font-bold');
+                });
+                btn.classList.add('bg-[#041627]', 'text-white', 'shadow-lg');
+                btn.classList.remove('text-slate-400', 'font-bold');
+
+                applyFilters();
+            });
+        });
+    </script>
+</AdminLayout>
+

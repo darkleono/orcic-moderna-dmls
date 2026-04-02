@@ -8,10 +8,11 @@ interface Props {
 const { title } = Astro.props;
 
 const menuItems = [
-    { label: 'Dashboard', icon: 'dashboard', href: '/admin' },
-    { label: 'Properties', icon: 'home_work', href: '/admin/properties' },
-    { label: 'Featured Bento', icon: 'grid_view', href: '/admin/developments' },
-    { label: 'Editorial Ethos', icon: 'edit_note', href: '/admin/content' },
+    { label: 'Panel de Control', href: '/admin', icon: 'dashboard' },
+    { label: 'Propiedades', href: '/admin/propiedades', icon: 'domain' },
+    { label: 'Desarrollos', href: '/admin/desarrollos', icon: 'grid_view' },
+    { label: 'Identidad Ethos', href: '/admin/contenido', icon: 'auto_stories' },
+    { label: 'Mensajes', href: '/admin/mensajes', icon: 'chat_bubble' },
 ];
 ---
 
@@ -21,9 +22,10 @@ const menuItems = [
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
 		<title>{title} | Admin ORCIC</title>
 		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
-		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet"/>
 	</head>
     <body class="bg-[#f9fafb] font-['Inter'] text-slate-900 antialiased overflow-hidden h-screen flex">
         
@@ -40,8 +42,8 @@ const menuItems = [
                     <img src="https://ui-avatars.com/api/?name=EA&background=041627&color=fff" class="w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col">
-                    <p class="text-[14px] font-bold text-slate-900 leading-none">Estate Admin</p>
-                    <p class="text-[11px] text-slate-400 font-medium mt-1">Managing 124 Properties</p>
+                    <p class="text-[14px] font-bold text-slate-900 leading-none">Admin ORCIC</p>
+                    <p class="text-[11px] text-slate-400 font-medium mt-1">Gestionando 124 Propiedades</p>
                 </div>
             </div>
 
@@ -62,11 +64,11 @@ const menuItems = [
             <div class="mt-auto pt-10 border-t border-slate-50 px-2">
                 <button class="w-full bg-[#041627] text-white py-4 rounded-xl flex items-center justify-center gap-4 hover:bg-black transition-all mb-10 font-bold text-sm">
                     <span class="material-symbols-outlined text-lg">add</span>
-                    <span class="tracking-tight">Add New Listing</span>
+                    <span class="tracking-tight">Nueva Propiedad</span>
                 </button>
                 <a href="/admin/logout" class="flex items-center gap-10 px-5 text-slate-400 hover:text-red-600 transition-colors font-bold text-sm">
                     <span class="material-symbols-outlined text-2xl font-light">logout</span>
-                    <span class="tracking-tight">Logout</span>
+                    <span class="tracking-tight">Cerrar Sesión</span>
                 </a>
             </div>
         </aside>
@@ -77,8 +79,8 @@ const menuItems = [
             <!-- Global Header (REFINED) -->
             <header class="flex justify-between items-center mb-10">
                 <div>
-                    <h1 class="text-4xl font-heading font-black text-slate-900 tracking-tighter leading-tight italic">Architectural Overview</h1>
-                    <p class="text-slate-500 font-medium text-base">Your portfolio is performing 12% better this month.</p>
+                    <h1 class="text-4xl font-heading font-black text-slate-900 tracking-tighter leading-tight italic">Resumen Editorial</h1>
+                    <p class="text-slate-500 font-medium text-base">Tu portafolio ha crecido un 12% este mes.</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
