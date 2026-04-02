@@ -5,19 +5,23 @@ export default {
 		extend: {
 			colors: {
 				// Paleta oficial de ORCIC
-				'orcic-navy': '#0b213b',
+				'orcic-navy': '#1a2b3c',
 				'orcic-navy-deep': '#041627',
 				'orcic-blue': '#007bff',
 				'orcic-bg': '#f8fafc',
 				// Surface Hierarchy Tokens (from Design System)
-				'at-surface': '#f7f9fb',
-				'at-surface-low': '#f2f4f6',
+				'at-surface': '#eff1f5',
+				'at-surface-low': '#e2e5ec',
 				'at-surface-lowest': '#ffffff',
-				'on-surface': '#191c1e',
-				'on-surface-variant': '#44474c',
-				'at-secondary': '#006d37',
-				'at-tertiary': '#ffb961',
-				'at-outline': '#c4c6cd',
+				'on-surface': '#1a2130',
+				'on-surface-variant': '#64748b',
+				'at-secondary': '#21ba70',
+				'at-tertiary': '#f5af4d',
+				'at-outline': '#cfd4df',
+			},
+			boxShadow: {
+				'at-ambient': '0 20px 50px -12px rgba(4, 22, 39, 0.08), 0 8px 24px -8px rgba(4, 22, 39, 0.04)',
+				'at-elevated': '0 30px 60px -12px rgba(4, 22, 39, 0.12), 0 10px 30px -10px rgba(4, 22, 39, 0.06)',
 			},
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],

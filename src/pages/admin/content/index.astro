@@ -1,0 +1,141 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+
+// In a real scenario, we would load this from an API or JSON file
+const aboutData = {
+    badge: "Consorcio Industrial",
+    title: "Tu Legado, Nuestra Ingeniería.",
+    paragraphs: [
+        "En ORCIC, no solo construimos estructuras; forjamos el escenario donde se desarrolla tu futuro. Con décadas de experiencia en el sector industrial y residencial, hemos perfeccionado el arte de combinar la robustez de la ingeniería con la elegancia del diseño moderno.",
+        "Nuestra misión es simple pero ambiciosa: ofrecer soluciones inmobiliarias que trasciendan generaciones, garantizando plusvalía y seguridad en cada metro cuadrado que desarrollamos."
+    ],
+    stats: [
+        { value: "20+", label: "Años de Trayectoria" },
+        { value: "500+", label: "Proyectos Entregados" }
+    ],
+    videoUrl: "https://orcic.mx/video/video-1.mp4"
+};
+---
+
+<AdminLayout title="Editorial Content">
+    <div class="max-w-5xl">
+        <!-- Section Header -->
+        <div class="flex items-center justify-between mb-12">
+            <div>
+                <p class="text-orcic-blue font-black tracking-[0.4em] text-[10px] uppercase mb-2">Architectural Ethos</p>
+                <h2 class="text-3xl font-heading font-black text-on-surface tracking-tight italic">Nuestra Trayectoria & Filosofía</h2>
+            </div>
+            <button class="bg-at-secondary text-white px-8 py-4 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-at-secondary/10">
+                Update Section
+            </button>
+        </div>
+
+        <!-- Editor Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Side: Main Texts -->
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-at-surface-low rounded-[2rem] p-10">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-8 opacity-40">Main Narrative</h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-on-surface mb-3 ml-1">Headline Badge</label>
+                            <input 
+                                type="text" 
+                                value={aboutData.badge}
+                                class="w-full bg-at-surface-lowest border-none rounded-2xl py-5 px-6 text-sm font-semibold focus:ring-2 focus:ring-orcic-blue/20 transition-all shadow-sm"
+                            />
+                        </div>
+                        
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-on-surface mb-3 ml-1">Main Headline</label>
+                            <textarea 
+                                rows="2"
+                                class="w-full bg-at-surface-lowest border-none rounded-2xl py-5 px-6 text-2xl font-heading font-black text-on-surface tracking-tight focus:ring-2 focus:ring-orcic-blue/20 transition-all shadow-sm resize-none"
+                            >{aboutData.title}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-on-surface mb-3 ml-1">Narrative (Paragraph 1)</label>
+                            <textarea 
+                                rows="4"
+                                class="w-full bg-at-surface-lowest border-none rounded-2xl py-6 px-6 text-sm font-medium leading-relaxed text-on-surface-variant focus:ring-2 focus:ring-orcic-blue/20 transition-all shadow-sm"
+                            >{aboutData.paragraphs[0]}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-on-surface mb-3 ml-1">Philosophy (Paragraph 2)</label>
+                            <textarea 
+                                rows="4"
+                                class="w-full bg-at-surface-lowest border-none rounded-2xl py-6 px-6 text-sm font-medium leading-relaxed text-on-surface-variant focus:ring-2 focus:ring-orcic-blue/20 transition-all shadow-sm"
+                            >{aboutData.paragraphs[1]}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-at-surface-low rounded-[2rem] p-10">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-8 opacity-40">Architecture in Numbers</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        {aboutData.stats.map(stat => (
+                            <div class="bg-at-surface-lowest p-8 rounded-3xl shadow-sm">
+                                <label class="block text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-4">Value / Label</label>
+                                <input 
+                                    type="text" 
+                                    value={stat.value}
+                                    class="text-4xl font-heading font-black text-orcic-blue bg-transparent border-none p-0 outline-none w-full"
+                                />
+                                <input 
+                                    type="text" 
+                                    value={stat.label}
+                                    class="text-[10px] uppercase font-bold tracking-widest text-on-surface-variant mt-2 bg-transparent border-none p-0 outline-none w-full"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Multimedia & Preview -->
+            <div class="space-y-8">
+                <div class="bg-at-surface-low rounded-[2rem] p-10">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-8 opacity-40">Heritage Content</h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-on-surface mb-3 ml-1">Cinematic Video URL</label>
+                            <input 
+                                type="text" 
+                                value={aboutData.videoUrl}
+                                class="w-full bg-at-surface-lowest border-none rounded-2xl py-5 px-6 text-[11px] font-semibold text-orcic-blue focus:ring-2 focus:ring-orcic-blue/20 transition-all shadow-sm"
+                            />
+                        </div>
+                        
+                        <div class="aspect-video bg-black rounded-3xl overflow-hidden relative group">
+                            <video class="w-full h-full object-cover opacity-60" muted playsinline>
+                                <source src={aboutData.videoUrl} type="video/mp4" />
+                            </video>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-at-surface-lowest text-4xl opacity-40">play_circle</span>
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 text-[9px] font-black uppercase tracking-widest text-at-surface-lowest/50">Video Preview</div>
+                        </div>
+
+                        <button class="w-full py-4 border-2 border-dashed border-on-surface/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:border-orcic-blue hover:text-orcic-blue transition-all">
+                            Replace Video File
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-orcic-navy-deep rounded-[2rem] p-8 text-white">
+                    <div class="w-12 h-12 rounded-xl bg-at-secondary flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-2xl font-black">tips_and_updates</span>
+                    </div>
+                    <h4 class="text-lg font-heading font-black tracking-tight mb-4 leading-tight">Editorial Advice</h4>
+                    <p class="text-[11px] text-at-outline/80 leading-relaxed font-medium">Keep your headlines under 40 characters for maximum impact. Use dynamic values in stats to reflect recent milestones.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</AdminLayout>

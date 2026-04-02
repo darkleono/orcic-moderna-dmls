@@ -9,10 +9,9 @@ const { title } = Astro.props;
 
 const menuItems = [
     { label: 'Dashboard', icon: 'dashboard', href: '/admin' },
-    { label: 'Propiedades', icon: 'home_work', href: '/admin/properties' },
-    { label: 'Desarrollos', icon: 'apartment', href: '/admin/developments' },
-    { label: 'Contenidos', icon: 'edit_note', href: '/admin/content' },
-    { label: 'Blog', icon: 'article', href: '/admin/blog' },
+    { label: 'Properties', icon: 'home_work', href: '/admin/properties' },
+    { label: 'Featured Bento', icon: 'grid_view', href: '/admin/developments' },
+    { label: 'Editorial Ethos', icon: 'edit_note', href: '/admin/content' },
 ];
 ---
 
@@ -26,89 +25,84 @@ const menuItems = [
 		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 	</head>
-	<body class="bg-at-surface font-['Inter'] text-on-surface antialiased overflow-hidden h-screen flex">
+	<body class="bg-[#eff1f5] font-['Inter'] text-slate-900 antialiased overflow-hidden h-screen flex">
+        
         <!-- Sidebar -->
-        <aside class="w-72 bg-at-surface-low text-on-surface flex flex-col relative z-50 border-r border-at-outline/20">
-            <div class="h-24 flex items-center px-10">
-                <span class="text-xl font-heading font-black tracking-tighter text-on-surface">EstateArchitect <span class="text-orcic-blue">.</span></span>
+        <aside class="w-80 bg-white border-r border-slate-200 flex flex-col p-8 shrink-0">
+            <div class="h-16 flex items-center mb-12">
+                <span class="text-2xl font-heading font-black tracking-tighter">EstateArchitect <span class="text-orcic-blue">.</span></span>
             </div>
             
-            <!-- Profile Section -->
-            <div class="px-8 mb-10">
-                <div class="flex items-center gap-4 p-3 bg-at-surface-lowest rounded-2xl shadow-sm border border-at-outline/5 transition-transform hover:scale-[1.02] cursor-pointer">
-                    <div class="w-10 h-10 rounded-full bg-orcic-blue flex items-center justify-center font-bold text-white shadow-lg shadow-orcic-blue/20">A</div>
-                    <div class="flex flex-col overflow-hidden">
-                        <span class="text-sm font-bold text-on-surface truncate">Estate Admin</span>
-                        <span class="text-[10px] text-on-surface-variant font-medium">124 Propiedades</span>
-                    </div>
+            <!-- Sidebar User Profile Block (STICH STYLE) -->
+            <div class="bg-slate-50 border border-slate-100 p-6 rounded-[2rem] mb-10 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 border-white shadow-sm">
+                    <img src="https://ui-avatars.com/api/?name=Estate+Admin&background=041627&color=fff" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="text-sm font-black text-slate-900 leading-tight">Estate Admin</p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">124 Properties</p>
                 </div>
             </div>
 
-            <nav class="flex-1 px-6 space-y-1">
-                {menuItems.map((item, index) => (
-                    <a href={item.href} class={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all group ${index === 0 ? 'bg-at-secondary/10 text-at-secondary shadow-sm' : 'text-on-surface-variant hover:bg-at-surface-lowest hover:text-on-surface'}`}>
-                        <span class={`material-symbols-outlined text-xl ${index === 0 ? 'font-bold' : 'group-hover:scale-110'} transition-transform`}>{item.icon}</span>
-                        <span class="text-sm font-bold tracking-tight">{item.label}</span>
+            <!-- Navigation -->
+            <nav class="flex-1 space-y-2">
+                {menuItems.map(item => (
+                    <a 
+                        href={item.href} 
+                        class={`flex items-center gap-5 px-6 py-4 rounded-2xl transition-all duration-300 font-bold ${Astro.url.pathname === item.href ? 'bg-[#21ba70]/10 text-[#21ba70]' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'}`}
+                    >
+                        <span class="material-symbols-outlined text-2xl font-black">{item.icon}</span>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
                     </a>
                 ))}
             </nav>
 
-            <div class="p-8 space-y-4">
-                <button class="w-full bg-orcic-navy-deep text-white py-4 rounded-xl font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-at-secondary transition-all shadow-xl shadow-orcic-navy-deep/10 active:scale-95 leading-none">
+            <!-- Bottom Action Block -->
+            <div class="mt-auto pt-8 border-t border-slate-100">
+                <button class="w-full bg-[#041627] text-white py-5 rounded-2xl flex items-center justify-center gap-4 hover:bg-slate-900 transition-all shadow-2xl shadow-slate-900/20 mb-6">
                     <span class="material-symbols-outlined text-lg">add</span>
-                    New Listing
+                    <span class="text-[11px] font-black uppercase tracking-widest">Add New Listing</span>
                 </button>
-                <div class="pt-4 border-t border-at-outline/20">
-                    <a href="/" class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-red-500 transition-colors group">
-                        <span class="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform">logout</span>
-                        <span class="text-xs font-bold uppercase tracking-widest">Logout</span>
-                    </a>
-                </div>
+                <a href="/admin/logout" class="flex items-center gap-5 px-6 py-2 text-slate-400 hover:text-red-500 transition-colors font-black text-[10px] uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-lg">logout</span>
+                    <span>Logout</span>
+                </a>
             </div>
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col overflow-hidden bg-at-surface">
-            <header class="h-24 bg-at-surface flex items-center justify-between px-12 shrink-0 z-40">
-                <div class="flex flex-col">
-                    <h1 class="text-4xl font-heading font-black tracking-tight text-on-surface leading-none">{title}</h1>
-                    <p class="text-on-surface-variant text-sm mt-1 font-medium">Welcome back, your portfolio is performing 12% better this month.</p>
+        <main class="flex-1 p-20 overflow-y-auto">
+            
+            <!-- Global Header -->
+            <header class="flex justify-between items-center mb-16">
+                <div>
+                    <h1 class="text-5xl font-heading font-black text-slate-900 tracking-tighter leading-tight">Architectural Overview</h1>
+                    <p class="text-slate-500 font-medium mt-2 text-lg">Welcome back, your portfolio is performing 12% better this month.</p>
                 </div>
+                
                 <div class="flex items-center gap-4">
-                    <div class="bg-at-surface-lowest px-4 py-2 rounded-xl flex items-center gap-3 border border-at-outline/10 shadow-sm">
-                        <span class="material-symbols-outlined text-on-surface-variant text-lg">calendar_today</span>
-                        <span class="text-[11px] font-bold text-on-surface uppercase tracking-tight">Oct 24 - Nov 24, 2024</span>
+                    <div class="bg-at-surface-low border border-at-outline/20 px-6 py-4 rounded-xl flex items-center gap-4 shadow-sm">
+                        <span class="material-symbols-outlined text-slate-400 text-xl">calendar_today</span>
+                        <span class="text-[11px] font-bold text-slate-600 uppercase tracking-widest">Oct 24, 2024 - Nov 24, 2024</span>
                     </div>
-                    <button class="bg-at-secondary text-white px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 transition-opacity whitespace-nowrap">
+                    <button class="bg-[#006d37] text-white px-8 py-4 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-green-900/20">
                         Download Report
                     </button>
                 </div>
             </header>
 
-            <main class="flex-1 overflow-y-auto p-12 pt-4 bg-at-surface">
-                <slot />
-            </main>
-        </div>
-
-
+            <!-- Page Content -->
+            <slot />
+        </main>
 
 		<style is:global>
 			.material-symbols-outlined {
 				font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 			}
-            ::-webkit-scrollbar {
-                width: 6px;
-            }
-            ::-webkit-scrollbar-track {
-                background: #f1f5f9;
-            }
-            ::-webkit-scrollbar-thumb {
-                background: #cbd5e1;
-                border-radius: 10px;
-            }
-            ::-webkit-scrollbar-thumb:hover {
-                background: #94a3b8;
-            }
+            ::-webkit-scrollbar { width: 6px; }
+            ::-webkit-scrollbar-track { background: transparent; }
+            ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+            ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 		</style>
 	</body>
 </html>

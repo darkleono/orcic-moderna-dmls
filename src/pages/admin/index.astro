@@ -1,153 +1,89 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 
-// FETCH DATA FOR STATS
-let properties = [];
-try {
-    const response = await fetch('https://orcic.mx/api-properties.php');
-    properties = await response.json();
-    if ('error' in properties) properties = [];
-} catch (e) {
-    properties = [];
-}
-
 const stats = [
-    { label: 'Propiedades Totales', value: properties.length, icon: 'home_work', color: 'blue' },
-    { label: 'Desarrollos Activos', value: '12', icon: 'apartment', color: 'indigo' },
-    { label: 'Leads Recientes', value: '48', icon: 'group', color: 'emerald' },
-    { label: 'Visitas (Mes)', value: '1.2k', icon: 'trending_up', color: 'amber' },
+    { label: 'PROPIEDADES ACTIVAS', value: '84', icon: 'domain', color: 'bg-[#21ba70]', badge: '+4 this month', badgeColor: 'bg-[#21ba70]/10 text-[#21ba70]' },
+    { label: 'LEADS NUEVOS', value: '312', icon: 'person_add', color: 'bg-[#f5af4d]', badge: 'New Leads', badgeColor: 'bg-[#f5af4d]/10 text-[#f5af4d]' },
+    { label: 'VISITAS TOTALES', value: '12.5k', icon: 'visibility', color: 'bg-[#007bff]', badge: '+18% increase', badgeColor: 'bg-[#007bff]/10 text-[#007bff]' }
 ];
 
-const recentProperties = properties.slice(0, 5);
+const activities = [
+    { title: 'Nueva consulta de Lead', desc: '"Villa Serenity" - Carlos Ruiz', time: 'HACE 12 MIN', color: 'bg-[#21ba70]' },
+    { title: 'Visita programada', desc: 'Penthouse Downtown - Mañana 10:00 AM', time: 'HACE 2 HORAS', color: 'bg-[#f5af4d]' },
+    { title: 'Propiedad Vendida', desc: 'Casa del Bosque - Trámite finalizado', time: 'AYER', color: 'bg-slate-300' }
+];
 ---
 
-<AdminLayout title="Overview">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-        {stats.map((stat, i) => (
-            <div class="bg-at-surface-lowest p-8 rounded-[2rem] transition-all duration-500 group relative shadow-sm border border-at-outline/5">
-                <div class="flex justify-between items-start mb-6">
-                    <div class={`p-4 rounded-2xl ${i === 0 ? 'bg-at-secondary/10 text-at-secondary' : i === 1 ? 'bg-at-tertiary/10 text-at-tertiary' : 'bg-orcic-blue/10 text-orcic-blue'}`}>
+<AdminLayout title="Dashboard">
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+        {stats.map(stat => (
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class={`${stat.color} w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg`}>
                         <span class="material-symbols-outlined text-2xl font-black">{stat.icon}</span>
                     </div>
-                    <span class={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${i === 0 ? 'bg-at-secondary/10 text-at-secondary' : i === 1 ? 'bg-at-tertiary/10 text-at-tertiary' : 'bg-orcic-blue/10 text-orcic-blue'}`}>
-                        {i === 0 ? '+4 this month' : i === 1 ? 'New Leads' : '+18% increase'}
-                    </span>
+                    <div class={`${stat.badgeColor} px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest`}>
+                        {stat.badge}
+                    </div>
                 </div>
-                <p class="text-on-surface-variant text-[10px] uppercase tracking-[0.3em] font-black mb-1">{stat.label}</p>
-                <div class="flex items-baseline gap-2">
-                    <h3 class="text-4xl font-heading font-black text-on-surface tracking-tighter">{stat.value}</h3>
-                </div>
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">{stat.label}</p>
+                <h3 class="text-6xl font-heading font-black text-slate-900 tracking-tighter">{stat.value}</h3>
             </div>
         ))}
     </div>
 
-    <!-- Evolution & Activity Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-        <!-- Evolution Chart Placeholder -->
-        <div class="lg:col-span-2 bg-at-surface-low rounded-[2.5rem] p-10">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-2xl font-heading font-black text-on-surface tracking-tight">Evolución de Contactos</h2>
-                <select class="bg-at-surface-lowest border-none rounded-xl text-[10px] font-black uppercase tracking-widest py-2 px-4 shadow-sm outline-none">
-                    <option>Last 6 Months</option>
-                    <option>Last Year</option>
-                </select>
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        
+        <!-- Evolution Chart (2/3) -->
+        <div class="lg:col-span-2 bg-at-surface-low rounded-[3rem] p-12 border border-at-outline/20">
+            <div class="flex justify-between items-center mb-16">
+                <h2 class="text-3xl font-heading font-black text-slate-900 tracking-tight leading-none">Evolución de Contactos</h2>
+                <div class="bg-white px-5 py-3 rounded-xl shadow-sm text-[11px] font-black uppercase tracking-widest text-slate-500 border border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors">
+                    Last 6 Months
+                </div>
             </div>
-            
-            <div class="h-64 flex items-end justify-between gap-4 px-4">
-                {[25, 45, 60, 100, 70, 75, 85].map((height, i) => (
-                    <div class="flex-1 group relative">
-                         <div class={`w-full rounded-t-xl transition-all duration-700 ${i === 3 ? 'bg-at-secondary shadow-lg shadow-at-secondary/20' : 'bg-on-surface/5 group-hover:bg-on-surface/10'}`} style={`height: ${height}%`}></div>
-                         {i === 3 && (
-                             <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-on-surface text-at-surface-lowest text-[10px] font-black py-1.5 px-3 rounded-lg shadow-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Peak: 420 leads</div>
-                         )}
+
+            <div class="h-80 flex items-end justify-between gap-6 px-4">
+                {[25, 45, 55, 100, 70, 85, 90].map((height, i) => (
+                    <div class="flex-1 flex flex-col items-center gap-6 group">
+                        <div 
+                            class={`w-full rounded-2xl transition-all duration-1000 ${i === 3 ? 'bg-at-secondary shadow-2xl shadow-at-secondary/30' : 'bg-slate-300/40 group-hover:bg-slate-300'}`} 
+                            style={`height: ${height}%`}
+                        ></div>
+                        <span class={`text-[10px] font-black uppercase tracking-widest ${i === 3 ? 'text-at-secondary' : 'text-slate-400'}`}>
+                            {['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][i]}
+                        </span>
                     </div>
                 ))}
             </div>
-            <div class="flex justify-between mt-6 text-[10px] font-black text-on-surface-variant uppercase tracking-widest px-4 opacity-40">
-                <span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-            </div>
         </div>
 
-        <!-- Recent Activity Timeline -->
-        <div class="bg-at-surface-lowest rounded-[2.5rem] p-10 border border-at-outline/5 shadow-sm">
-            <h2 class="text-xl font-heading font-black text-on-surface tracking-tight mb-10">Actividad Reciente</h2>
-            <div class="space-y-10 relative">
-                 <!-- Timeline Line -->
-                <div class="absolute left-[19px] top-2 bottom-2 w-[2px] bg-at-surface-low rounded-full"></div>
-                
-                {[
-                    { title: 'Nueva consulta de Lead', desc: '"Villa Serenity" - Carlos Ruiz', time: 'Hace 12 min', icon: 'chat_bubble', color: 'bg-at-secondary' },
-                    { title: 'Visita programada', desc: 'Penthouse Downtown - Mañana 10:00 AM', time: 'Hace 2 horas', icon: 'event', color: 'bg-at-tertiary' },
-                    { title: 'Propiedad Vendida', desc: 'Casa del Bosque - Trámite finalizado', time: 'Ayer', icon: 'task_alt', color: 'bg-on-surface-variant' }
-                ].map(item => (
-                    <div class="flex gap-6 relative z-10">
-                        <div class={`w-10 h-10 rounded-full ${item.color} flex items-center justify-center text-at-surface-lowest shadow-lg shadow-black/5`}>
-                            <span class="material-symbols-outlined text-[16px]">{item.icon}</span>
+        <!-- Recent Activity (1/3) -->
+        <div class="bg-white rounded-[3rem] p-12 shadow-sm border border-slate-100">
+            <h2 class="text-2xl font-heading font-black text-slate-900 tracking-tight mb-12">Actividad <br/> Reciente</h2>
+            
+            <div class="space-y-12 relative">
+                <!-- Timeline V-Line -->
+                <div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-slate-100"></div>
+
+                {activities.map(item => (
+                    <div class="flex gap-8 relative z-10">
+                        <div class={`${item.color} w-10 h-10 rounded-full flex items-center justify-center text-white border-4 border-white shadow-md shrink-0`}>
+                            <span class="material-symbols-outlined text-[16px] font-black">
+                                {item.color.includes('21ba70') ? 'chat_bubble' : item.color.includes('f5af4d') ? 'event' : 'task_alt'}
+                            </span>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-sm font-bold text-on-surface leading-tight">{item.title}</span>
-                            <span class="text-xs text-on-surface-variant mt-1 font-medium">{item.desc}</span>
-                            <span class="text-[9px] text-at-outline font-black uppercase tracking-widest mt-3">{item.time}</span>
+                            <h4 class="font-black text-slate-900 text-sm leading-tight mb-1">{item.title}</h4>
+                            <p class="text-slate-500 text-xs font-medium leading-relaxed">{item.desc}</p>
+                            <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-4">{item.time}</span>
                         </div>
                     </div>
                 ))}
             </div>
-            <button class="w-full mt-12 py-4 border-t border-at-surface-low text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-orcic-blue transition-colors">View All Activities</button>
         </div>
-    </div>
 
-    <!-- Property Management Quick Table -->
-    <div class="bg-at-surface-low rounded-[2.5rem] p-10 overflow-hidden">
-        <div class="flex items-center justify-between mb-10 px-2">
-            <h2 class="text-2xl font-heading font-black text-on-surface tracking-tight">Quick Inventory Management</h2>
-            <div class="flex gap-2">
-                <button class="w-10 h-10 rounded-xl bg-at-surface-lowest flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-all shadow-sm">
-                    <span class="material-symbols-outlined text-xl">filter_list</span>
-                </button>
-                <button class="w-10 h-10 rounded-xl bg-at-surface-lowest flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-all shadow-sm">
-                    <span class="material-symbols-outlined text-xl">search</span>
-                </button>
-            </div>
-        </div>
-        
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-separate border-spacing-y-2">
-                <thead>
-                    <tr class="text-[10px] uppercase tracking-[0.2em] font-black text-on-surface-variant opacity-50">
-                        <th class="pb-6 px-6">Property</th>
-                        <th class="pb-6 px-6">Status</th>
-                        <th class="pb-6 px-6 text-right">Utility</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {recentProperties.map(prop => (
-                        <tr class="group">
-                            <td class="py-4 px-6 bg-at-surface-lowest rounded-l-3xl transition-transform group-hover:-translate-y-0.5">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-at-surface-low overflow-hidden shrink-0">
-                                        {prop.image && <img src={prop.image} class="w-full h-full object-cover" />}
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-bold text-on-surface text-sm max-w-[200px] truncate">{prop.title || prop.name || 'Untitled'}</span>
-                                        <span class="text-[11px] text-on-surface-variant font-medium">{prop.city}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 bg-at-surface-lowest transition-transform group-hover:-translate-y-0.5">
-                                <span class="bg-at-secondary/10 text-at-secondary px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Available</span>
-                            </td>
-                            <td class="py-4 px-6 bg-at-surface-lowest rounded-r-3xl text-right transition-transform group-hover:-translate-y-0.5">
-                                <button class="w-10 h-10 rounded-full hover:bg-at-surface-low flex items-center justify-center transition-colors text-on-surface-variant">
-                                    <span class="material-symbols-outlined text-xl">more_vert</span>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
     </div>
 </AdminLayout>
-
-</AdminLayout>
-
