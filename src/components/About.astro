@@ -52,29 +52,29 @@
                         Tu navegador no soporta el video.
                     </video>
 
-                    <!-- Semi-glass Controls Overlay -->
-                    <div id="video-controls" class="absolute bottom-6 left-6 right-6 flex items-center justify-between px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl opacity-0 transition-all duration-500 z-30">
+                    <!-- Darker semi-glass Controls Overlay (ORCIC Navy) -->
+                    <div id="video-controls" class="absolute bottom-6 left-6 right-6 flex items-center justify-between px-6 py-3 bg-orcic-navy/40 backdrop-blur-xl border border-white/10 rounded-2xl opacity-0 transition-all duration-500 z-30 shadow-2xl">
                         <div class="flex items-center gap-5">
-                            <button id="ctrl-play" class="text-white hover:scale-110 transition-transform flex items-center">
+                            <button id="ctrl-play" class="text-white hover:text-orcic-blue transition-all flex items-center drop-shadow-md">
                                 <span class="material-symbols-outlined fill-current text-2xl" id="play-icon-main">play_arrow</span>
                             </button>
-                            <div class="h-4 w-px bg-white/20"></div>
-                            <button id="ctrl-volume" class="text-white hover:scale-110 transition-transform flex items-center">
+                            <div class="h-4 w-px bg-white/10"></div>
+                            <button id="ctrl-volume" class="text-white hover:text-orcic-blue transition-all flex items-center drop-shadow-md">
                                 <span class="material-symbols-outlined text-2xl" id="volume-icon">volume_off</span>
                             </button>
                         </div>
                         
                         <div class="flex items-center gap-5">
-                            <button id="ctrl-fullscreen" class="text-white hover:scale-110 transition-transform flex items-center">
+                            <button id="ctrl-fullscreen" class="text-white hover:text-orcic-blue transition-all flex items-center drop-shadow-md">
                                 <span class="material-symbols-outlined text-2xl">fullscreen</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Overlay central para click (Play gigante suave) -->
+                    <!-- Overlay central para click con mayor definición -->
                     <div id="video-click-overlay" class="absolute inset-0 flex items-center justify-center cursor-pointer z-20 transition-all duration-500">
-                        <div id="center-btn" class="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/20 scale-90 opacity-0 transition-all duration-500">
-                             <span id="center-play-icon" class="material-symbols-outlined text-white text-4xl fill-current">play_arrow</span>
+                        <div id="center-btn" class="w-20 h-20 bg-orcic-navy/20 backdrop-blur-2xl rounded-full flex items-center justify-center border border-white/20 scale-90 opacity-0 transition-all duration-500 shadow-xl">
+                             <span id="center-play-icon" class="material-symbols-outlined text-white text-4xl fill-current drop-shadow-lg">play_arrow</span>
                         </div>
                     </div>
                 </div>
