@@ -1,13 +1,13 @@
 ---
 export interface Property {
-    id: string;
+    id: number;
     code: string;
     name: string;
     description: string;
-    value_property: string;
+    price: string;
     area: string;
-    bedroom: string;
-    bathroom: string;
+    num_rooms: string | number;
+    num_bathrooms: string | number;
     category: string;
     status: string;
     city: string;
@@ -24,69 +24,78 @@ const { property } = Astro.props;
 // Normalizar la imagen para que use la ruta correcta de storage de Laravel
 const mainImage = property.images && property.images.length > 0 
     ? `https://orcic.mx/storage/${property.images[0]}`
-    : 'https://via.placeholder.com/800x600?text=Sin+Imagen';
+    : '/storage/placeholder.svg';
 
 // Formateador de precio
 const formatter = new Intl.NumberFormat('es-MX', {
   style: 'currency',
   currency: 'MXN',
+  minimumFractionDigits: 0,
 });
+
+const formattedPrice = property.price ? formatter.format(parseFloat(property.price)) : "Consultar Precio";
 ---
 
-<div class="md:col-span-4 bg-white rounded-xl overflow-hidden relative group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300">
-    <div class="relative h-64 overflow-hidden">
+<div class="group bg-white rounded-2xl overflow-hidden border border-slate-100 hover:border-orcic-blue/20 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative">
+    
+    <!-- Imagen y Tags -->
+    <div class="relative aspect-[4/3] overflow-hidden">
         <img 
             src={mainImage} 
             alt={property.name}
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
         />
-        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-        <div class="absolute top-4 left-4">
-            <span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-orcic-blue text-white">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+        
+        <div class="absolute top-4 left-4 flex gap-2">
+            <span class="bg-[#0b213b] text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">
                 {property.status}
             </span>
-        </div>
-        <div class="absolute top-4 right-4">
-            <span class="bg-white/90 backdrop-blur-sm text-slate-900 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            <span class="bg-white/90 backdrop-blur-md text-slate-800 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">
                 {property.category}
             </span>
         </div>
+        
+        <div class="absolute bottom-4 left-4">
+             <div class="flex items-center gap-1.5 text-white">
+                <span class="material-symbols-outlined text-sm">location_on</span>
+                <span class="text-xs font-bold tracking-wide uppercase">{property.city}</span>
+            </div>
+        </div>
     </div>
     
-    <div class="p-6">
-        <div class="flex justify-between items-start mb-2">
-            <h4 class="text-xl font-bold font-['Manrope'] text-slate-800 line-clamp-1">{property.name}</h4>
-            <span class="material-symbols-outlined text-slate-400 group-hover:text-orcic-blue transition-colors">favorite</span>
-        </div>
+    <!-- Contenido -->
+    <div class="p-6 flex flex-col flex-grow">
+        <h4 class="text-lg font-black font-['Manrope'] text-slate-900 mb-2 group-hover:text-orcic-blue transition-colors line-clamp-1">
+            {property.name}
+        </h4>
         
-        <p class="text-orcic-blue font-bold text-lg mb-4">
-            {formatter.format(parseFloat(property.value_property))}
+        <p class="text-orcic-blue font-black text-xl mb-6">
+            {formattedPrice}
         </p>
         
-        <div class="flex items-center gap-2 text-slate-500 text-sm mb-6 pb-6 border-b border-slate-100">
-            <span class="material-symbols-outlined text-sm">location_on</span>
-            <span class="line-clamp-1">{property.city}</span>
-        </div>
-        
-        <div class="grid grid-cols-3 gap-4 text-slate-600 text-sm font-medium">
-            <div class="flex flex-col items-center gap-1">
-                <span class="material-symbols-outlined text-slate-400">bed</span>
-                <span>{property.bedroom} Rec.</span>
+        <!-- Ficha Técnica -->
+        <div class="grid grid-cols-3 gap-2 pt-6 border-t border-slate-50 mt-auto">
+            <div class="flex flex-col items-center gap-1 border-r border-slate-50">
+                <span class="material-symbols-outlined text-slate-300 text-xl">bed</span>
+                <span class="text-[11px] font-bold text-slate-600 uppercase tracking-tighter">{property.num_rooms} Recs.</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 border-r border-slate-50">
+                <span class="material-symbols-outlined text-slate-300 text-xl">bathtub</span>
+                <span class="text-[11px] font-bold text-slate-600 uppercase tracking-tighter">{property.num_bathrooms} Baños</span>
             </div>
             <div class="flex flex-col items-center gap-1">
-                <span class="material-symbols-outlined text-slate-400">bathtub</span>
-                <span>{property.bathroom} Baños</span>
-            </div>
-            <div class="flex flex-col items-center gap-1">
-                <span class="material-symbols-outlined text-slate-400">square_foot</span>
-                <span>{property.area} m²</span>
+                <span class="material-symbols-outlined text-slate-300 text-xl">architecture</span>
+                <span class="text-[11px] font-bold text-slate-600 uppercase tracking-tighter">{property.area} m²</span>
             </div>
         </div>
     </div>
 
-    <!-- Botón flotante al hover -->
-    <div class="absolute bottom-4 left-6 right-6 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-        <a href={`/propiedad/${property.code}`} class="w-full bg-slate-900 text-white text-center py-3 rounded-lg font-bold block shadow-2xl">
+    <!-- Overlay de Acción (Stitch Style) -->
+    <div class="absolute inset-0 bg-[#0b213b]/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-8 text-center backdrop-blur-sm z-30">
+        <span class="text-white/60 text-[10px] uppercase tracking-[0.3em] font-bold mb-4">Código: {property.code}</span>
+        <h5 class="text-white text-xl font-black mb-8">{property.name}</h5>
+        <a href={`/propiedad/${property.code}`} class="bg-white text-[#0b213b] px-8 py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest hover:bg-orcic-blue hover:text-white transition-all shadow-2xl">
             Ver Detalles
         </a>
     </div>
