@@ -49,6 +49,7 @@
                     
                     <!-- Video Real de ORCIC -->
                     <video 
+                        id="video-about"
                         class="absolute inset-0 w-full h-full object-cover"
                         autoplay 
                         loop 
@@ -62,10 +63,10 @@
                     <!-- Overlay Stitch -->
                     <div class="absolute inset-0 bg-gradient-to-t from-orcic-blue/40 to-transparent"></div>
                     
-                    <!-- Botón de Play (Visual) -->
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform duration-500 cursor-pointer">
-                            <span class="material-symbols-outlined text-white text-4xl fill-current">play_arrow</span>
+                    <!-- Botón de Play (Interactivo) -->
+                    <div id="video-control" class="absolute inset-0 flex items-center justify-center cursor-pointer z-20 group-hover:opacity-100 transition-opacity">
+                        <div class="w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform duration-500">
+                            <span id="play-icon" class="material-symbols-outlined text-white text-4xl fill-current">play_arrow</span>
                         </div>
                     </div>
                 </div>
@@ -78,3 +79,43 @@
         </div>
     </div>
 </section>
+
+<script>
+    const video = document.getElementById('video-about') as HTMLVideoElement;
+    const playBtn = document.getElementById('video-control');
+    const playIcon = document.getElementById('play-icon');
+
+    if (video && playBtn && playIcon) {
+        playBtn.addEventListener('click', () => {
+            if (video.muted) {
+                video.muted = false;
+                video.play();
+                playIcon.innerText = 'pause';
+                playBtn.classList.add('opacity-0');
+            } else {
+                if (video.paused) {
+                    video.play();
+                    playIcon.innerText = 'pause';
+                    playBtn.classList.add('opacity-0');
+                } else {
+                    video.pause();
+                    playIcon.innerText = 'play_arrow';
+                    playBtn.classList.remove('opacity-0');
+                }
+            }
+        });
+
+        // Mostrar botón al entrar al video si está con sonido o pausado
+        video.addEventListener('mouseenter', () => {
+            if (!video.muted || video.paused) {
+                playBtn.classList.remove('opacity-0');
+            }
+        });
+
+        // Asegurar que si el video se pausa por otra razón, el botón se vea
+        video.onpause = () => {
+            playIcon.innerText = 'play_arrow';
+            playBtn.classList.remove('opacity-0');
+        };
+    }
+</script>
