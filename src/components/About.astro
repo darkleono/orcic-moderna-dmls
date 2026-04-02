@@ -52,7 +52,6 @@
                         id="video-about"
                         class="absolute inset-0 w-full h-full object-cover"
                         autoplay 
-                        loop 
                         muted 
                         playsinline
                     >
@@ -86,6 +85,11 @@
     const playIcon = document.getElementById('play-icon');
 
     if (video && playBtn && playIcon) {
+        // Configuración inicial
+        video.volume = 0.5;
+        let loopCount = 0;
+        const maxLoops = 3;
+
         playBtn.addEventListener('click', () => {
             if (video.muted) {
                 video.muted = false;
@@ -102,6 +106,19 @@
                     playIcon.innerText = 'play_arrow';
                     playBtn.classList.remove('opacity-0');
                 }
+            }
+        });
+
+        // Control de loops (máximo 3 veces)
+        video.addEventListener('ended', () => {
+            loopCount++;
+            if (loopCount < maxLoops) {
+                video.currentTime = 0;
+                video.play();
+            } else {
+                // Se detiene después de la 3ra vez
+                playIcon.innerText = 'play_arrow';
+                playBtn.classList.remove('opacity-0');
             }
         });
 
