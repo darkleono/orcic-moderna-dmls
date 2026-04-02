@@ -15,44 +15,47 @@ const activities = [
 ---
 
 <AdminLayout title="Dashboard">
-    <!-- Stats Row -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+    <!-- Stats Row (COMPACT) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {stats.map(stat => (
-            <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 group">
-                <div class="flex items-center gap-4 mb-10">
-                    <div class={`${stat.color} w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-lg`}>
-                        <span class="material-symbols-outlined text-2xl font-black">{stat.icon}</span>
+            <div class="bg-white p-8 rounded-[1.5rem] shadow-sm border border-slate-100 hover:shadow-md transition-all duration-300 group">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class={`${stat.color} w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-lg`}>
+                        <span class="material-symbols-outlined text-xl font-black">{stat.icon}</span>
                     </div>
-                    <div class={`${stat.badgeColor} px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest`}>
+                    <div class={`${stat.badgeColor} px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest`}>
                         {stat.badge}
                     </div>
                 </div>
-                <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] mb-2">{stat.label}</p>
-                <h3 class="text-6xl font-heading font-black text-slate-900 tracking-tighter">{stat.value}</h3>
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mb-1">{stat.label}</p>
+                <h3 class="text-5xl font-heading font-black text-slate-900 tracking-tighter">{stat.value}</h3>
             </div>
         ))}
     </div>
 
-    <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <!-- Main Content Grid (REFINED GAP) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         <!-- Evolution Chart (2/3) -->
-        <div class="lg:col-span-2 bg-at-surface-low rounded-[3rem] p-12 border border-at-outline/20">
-            <div class="flex justify-between items-center mb-16">
-                <h2 class="text-3xl font-heading font-black text-slate-900 tracking-tight leading-none">Evolución de Contactos</h2>
-                <div class="bg-white px-5 py-3 rounded-xl shadow-sm text-[11px] font-black uppercase tracking-widest text-slate-500 border border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors">
+        <div class="lg:col-span-2 bg-[#f8fafc] rounded-[2rem] p-10 border border-slate-200 shadow-sm relative overflow-hidden group">
+            <div class="flex justify-between items-center mb-12 relative z-10">
+                <div>
+                    <h2 class="text-2xl font-heading font-black text-slate-900 tracking-tight leading-none italic">Evolución de Contactos</h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">Active Engagement analysis</p>
+                </div>
+                <div class="bg-white px-4 py-2 rounded-lg shadow-sm text-[10px] font-black uppercase tracking-widest text-slate-500 border border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors">
                     Last 6 Months
                 </div>
             </div>
 
-            <div class="h-80 flex items-end justify-between gap-6 px-4">
+            <div class="h-64 flex items-end justify-between gap-4 px-2 relative z-10">
                 {[25, 45, 55, 100, 70, 85, 90].map((height, i) => (
-                    <div class="flex-1 flex flex-col items-center gap-6 group">
+                    <div class="flex-1 h-full flex flex-col justify-end items-center gap-4 group/bar">
                         <div 
-                            class={`w-full rounded-2xl transition-all duration-1000 ${i === 3 ? 'bg-at-secondary shadow-2xl shadow-at-secondary/30' : 'bg-slate-300/40 group-hover:bg-slate-300'}`} 
+                            class={`w-full max-w-[50px] rounded-xl transition-all duration-700 ${i === 3 ? 'bg-[#0056b3] shadow-xl shadow-blue-900/30' : 'bg-slate-300 group-hover/bar:bg-slate-400'}`} 
                             style={`height: ${height}%`}
                         ></div>
-                        <span class={`text-[10px] font-black uppercase tracking-widest ${i === 3 ? 'text-at-secondary' : 'text-slate-400'}`}>
+                        <span class={`text-[9px] font-black uppercase tracking-widest shrink-0 ${i === 3 ? 'text-[#0056b3]' : 'text-slate-400'}`}>
                             {['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][i]}
                         </span>
                     </div>
@@ -61,29 +64,28 @@ const activities = [
         </div>
 
         <!-- Recent Activity (1/3) -->
-        <div class="bg-white rounded-[3rem] p-12 shadow-sm border border-slate-100">
-            <h2 class="text-2xl font-heading font-black text-slate-900 tracking-tight mb-12">Actividad <br/> Reciente</h2>
+        <div class="bg-white rounded-[2rem] p-10 shadow-sm border border-slate-200 relative">
+            <h2 class="text-xl font-heading font-black text-slate-900 tracking-tight mb-10 italic underline decoration-orcic-blue/20 underline-offset-4">Highlights</h2>
             
-            <div class="space-y-12 relative">
+            <div class="space-y-8 relative">
                 <!-- Timeline V-Line -->
-                <div class="absolute left-[19px] top-4 bottom-4 w-0.5 bg-slate-100"></div>
+                <div class="absolute left-[15px] top-4 bottom-4 w-px bg-slate-100"></div>
 
                 {activities.map(item => (
-                    <div class="flex gap-8 relative z-10">
-                        <div class={`${item.color} w-10 h-10 rounded-full flex items-center justify-center text-white border-4 border-white shadow-md shrink-0`}>
-                            <span class="material-symbols-outlined text-[16px] font-black">
+                    <div class="flex gap-6 relative z-10">
+                        <div class={`${item.color} w-8 min-w-[32px] h-8 rounded-full flex items-center justify-center text-white border-4 border-white shadow-sm shrink-0`}>
+                            <span class="material-symbols-outlined text-[12px] font-black">
                                 {item.color.includes('21ba70') ? 'chat_bubble' : item.color.includes('f5af4d') ? 'event' : 'task_alt'}
                             </span>
                         </div>
                         <div class="flex flex-col">
-                            <h4 class="font-black text-slate-900 text-sm leading-tight mb-1">{item.title}</h4>
-                            <p class="text-slate-500 text-xs font-medium leading-relaxed">{item.desc}</p>
-                            <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-4">{item.time}</span>
+                            <h4 class="font-black text-slate-900 text-xs leading-tight mb-1">{item.title}</h4>
+                            <p class="text-slate-500 text-[11px] font-medium leading-normal">{item.desc}</p>
+                            <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest mt-2">{item.time}</span>
                         </div>
                     </div>
                 ))}
             </div>
         </div>
-
     </div>
 </AdminLayout>

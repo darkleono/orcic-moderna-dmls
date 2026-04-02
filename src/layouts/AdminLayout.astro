@@ -25,69 +25,67 @@ const menuItems = [
 		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 	</head>
-	<body class="bg-[#eff1f5] font-['Inter'] text-slate-900 antialiased overflow-hidden h-screen flex">
+    <body class="bg-[#f9fafb] font-['Inter'] text-slate-900 antialiased overflow-hidden h-screen flex">
         
         <!-- Sidebar -->
-        <aside class="w-80 bg-white border-r border-slate-200 flex flex-col p-8 shrink-0">
-            <div class="h-16 flex items-center mb-12">
-                <span class="text-2xl font-heading font-black tracking-tighter">EstateArchitect <span class="text-orcic-blue">.</span></span>
+        <aside class="w-72 bg-white border-r border-slate-100 flex flex-col px-8 py-14 shrink-0 relative z-50 overflow-hidden">
+            <!-- Logo: Plain text, stich style -->
+            <div class="mb-14 px-4">
+                <span class="text-2xl font-heading font-extrabold tracking-tight text-slate-900 leading-none">EstateArchitect</span>
             </div>
             
-            <!-- Sidebar User Profile Block (STICH STYLE) -->
-            <div class="bg-slate-50 border border-slate-100 p-6 rounded-[2rem] mb-10 flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full overflow-hidden shrink-0 border-2 border-white shadow-sm">
-                    <img src="https://ui-avatars.com/api/?name=Estate+Admin&background=041627&color=fff" class="w-full h-full object-cover">
+            <!-- User Profile: Precise stich alignment -->
+            <div class="flex items-center gap-4 mb-20 px-4">
+                <div class="w-12 h-12 rounded-full overflow-hidden bg-slate-900 flex items-center justify-center shrink-0 shadow-sm border border-slate-100">
+                    <img src="https://ui-avatars.com/api/?name=EA&background=041627&color=fff" class="w-full h-full object-cover">
                 </div>
-                <div>
-                    <p class="text-sm font-black text-slate-900 leading-tight">Estate Admin</p>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">124 Properties</p>
+                <div class="flex flex-col">
+                    <p class="text-[14px] font-bold text-slate-900 leading-none">Estate Admin</p>
+                    <p class="text-[11px] text-slate-400 font-medium mt-1">Managing 124 Properties</p>
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <nav class="flex-1 space-y-2">
+            <!-- Navigation: wide gap stich style -->
+            <nav class="flex-1 space-y-4 px-2">
                 {menuItems.map(item => (
                     <a 
                         href={item.href} 
-                        class={`flex items-center gap-5 px-6 py-4 rounded-2xl transition-all duration-300 font-bold ${Astro.url.pathname === item.href ? 'bg-[#21ba70]/10 text-[#21ba70]' : 'text-slate-400 hover:bg-slate-50 hover:text-slate-900'}`}
+                        class={`flex items-center gap-10 px-5 py-4 rounded-xl transition-all duration-300 ${Astro.url.pathname === item.href ? 'bg-slate-50 text-[#0056b3]' : 'text-slate-500 hover:text-slate-900'}`}
                     >
-                        <span class="material-symbols-outlined text-2xl font-black">{item.icon}</span>
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
+                        <span class="material-symbols-outlined text-2xl font-light">{item.icon}</span>
+                        <span class="text-[14px] font-bold tracking-tight">{item.label}</span>
                     </a>
                 ))}
             </nav>
 
-            <!-- Bottom Action Block -->
-            <div class="mt-auto pt-8 border-t border-slate-100">
-                <button class="w-full bg-[#041627] text-white py-5 rounded-2xl flex items-center justify-center gap-4 hover:bg-slate-900 transition-all shadow-2xl shadow-slate-900/20 mb-6">
+            <!-- Bottom Action Block: Dark buttons stich alignment -->
+            <div class="mt-auto pt-10 border-t border-slate-50 px-2">
+                <button class="w-full bg-[#041627] text-white py-4 rounded-xl flex items-center justify-center gap-4 hover:bg-black transition-all mb-10 font-bold text-sm">
                     <span class="material-symbols-outlined text-lg">add</span>
-                    <span class="text-[11px] font-black uppercase tracking-widest">Add New Listing</span>
+                    <span class="tracking-tight">Add New Listing</span>
                 </button>
-                <a href="/admin/logout" class="flex items-center gap-5 px-6 py-2 text-slate-400 hover:text-red-500 transition-colors font-black text-[10px] uppercase tracking-widest">
-                    <span class="material-symbols-outlined text-lg">logout</span>
-                    <span>Logout</span>
+                <a href="/admin/logout" class="flex items-center gap-10 px-5 text-slate-400 hover:text-red-600 transition-colors font-bold text-sm">
+                    <span class="material-symbols-outlined text-2xl font-light">logout</span>
+                    <span class="tracking-tight">Logout</span>
                 </a>
             </div>
         </aside>
 
         <!-- Main Content Area -->
-        <main class="flex-1 p-20 overflow-y-auto">
+        <main class="flex-1 p-10 overflow-y-auto">
             
-            <!-- Global Header -->
-            <header class="flex justify-between items-center mb-16">
+            <!-- Global Header (REFINED) -->
+            <header class="flex justify-between items-center mb-10">
                 <div>
-                    <h1 class="text-5xl font-heading font-black text-slate-900 tracking-tighter leading-tight">Architectural Overview</h1>
-                    <p class="text-slate-500 font-medium mt-2 text-lg">Welcome back, your portfolio is performing 12% better this month.</p>
+                    <h1 class="text-4xl font-heading font-black text-slate-900 tracking-tighter leading-tight italic">Architectural Overview</h1>
+                    <p class="text-slate-500 font-medium text-base">Your portfolio is performing 12% better this month.</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <div class="bg-at-surface-low border border-at-outline/20 px-6 py-4 rounded-xl flex items-center gap-4 shadow-sm">
-                        <span class="material-symbols-outlined text-slate-400 text-xl">calendar_today</span>
+                    <div class="bg-white border border-slate-200 px-5 py-3 rounded-lg flex items-center gap-4 shadow-sm">
+                        <span class="material-symbols-outlined text-slate-400 text-lg">calendar_today</span>
                         <span class="text-[11px] font-bold text-slate-600 uppercase tracking-widest">Oct 24, 2024 - Nov 24, 2024</span>
                     </div>
-                    <button class="bg-[#006d37] text-white px-8 py-4 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-green-900/20">
-                        Download Report
-                    </button>
                 </div>
             </header>
 
