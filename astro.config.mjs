@@ -3,6 +3,8 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://orcic.mx',
+  base: '/modern',
   integrations: [tailwind()],
-  output: 'static', // Generamos archivos estáticos para que sea 100% compatible con tu hosting compartido
+  output: 'static',
 });

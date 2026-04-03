@@ -3,7 +3,7 @@
  * Centraliza la comunicación con el PHP Bridge.
  */
 
-const API_URL = '/bridge.php'; // Cambiar a la URL definitiva si es necesario
+const API_URL = `${import.meta.env.BASE_URL}/bridge.php`.replace('//', '/');
 const API_TOKEN = 'ORCIC_BRIDGE_TOKEN_2026_X1';
 
 // Definición de Interfaces (Tipado)
