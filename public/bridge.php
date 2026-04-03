@@ -54,9 +54,45 @@ $action = $_GET['action'] ?? 'read';
 
 switch ($action) {
     case 'read':
-        $stmt = $pdo->query("SELECT * FROM properties ORDER BY id DESC");
-        $results = $stmt->fetchAll();
-        echo json_encode($results);
+        try {
+            // 1. Consulta Principal
+            $stmt = $pdo->query("
+                SELECT p.*, k.description as category, a.description as status, l.description as city 
+                FROM properties p
+                LEFT JOIN kind_properties k ON p.type_property_id = k.id
+                LEFT JOIN ad_types a ON p.ad_type_id = a.id
+                LEFT JOIN locations l ON p.location_id = l.id
+                WHERE p.deleted_at IS NULL
+                ORDER BY p.created_at DESC
+            ");
+            $results = $stmt->fetchAll();
+            
+            // 2. Agregar imágenes y características
+            foreach ($results as &$prop) {
+                // Imágenes
+                $imgStmt = $pdo->prepare("SELECT img FROM property_imgs WHERE property_id = ?");
+                $imgStmt->execute([$prop['id']]);
+                $prop['images'] = $imgStmt->fetchAll(PDO::FETCH_COLUMN);
+
+                // Características
+                $featStmt = $pdo->prepare("
+                    SELECT f.description 
+                    FROM property_features f
+                    JOIN property_feats pf ON f.id = pf.property_feature_id
+                    WHERE pf.property_id = ?
+                ");
+                $featStmt->execute([$prop['id']]);
+                $prop['features'] = $featStmt->fetchAll(PDO::FETCH_COLUMN);
+            }
+            
+            echo json_encode($results);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Error en la consulta: " . $e->getMessage()
+            ]);
+        }
         break;
 
     case 'save':
