@@ -1,36 +1,15 @@
 ---
 import AdminLayout from '../../../layouts/AdminLayout.astro';
+import homeData from '/src/data/homeData.json';
 
-// Datos de ejemplo para el Hero
-const homeHero = {
-    badge: "Líderes en Consorcio Industrial",
-    title: "Tu Legado, Nuestra Ingeniería.",
-    subtitle: "Desde naves industriales hasta residencias exclusivas. Definiendo el futuro inmobiliario en México.",
-    backgroundUrl: "/storage/video-hero.mp4"
-};
+// Datos de ejemplo para el Hero (Portada)
+const homeHero = homeData.hero;
 
-// Datos de ejemplo para las estadísticas
-const impactStats = [
-    { label: "Años de Trayectoria", value: "20+", icon: "history_edu" },
-    { label: "Proyectos Entregados", value: "500+", icon: "done_all" },
-    { label: "Hectáreas Desarrolladas", value: "1.2k", icon: "landscape" }
-];
+// Estadísticas de Impacto (Reales/Coherentes)
+const impactStats = homeData.stats;
 
-// Datos de ejemplo para la narrativa de marca (Ethos)
-const ethosBlocks = [
-    {
-        title: "Tu Legado, Nuestra Ingeniería.",
-        content: "En ORCIC, no solo construimos estructuras; forjamos el escenario donde se desarrolla tu futuro. Con décadas de experiencia en el sector industrial y residencial, hemos perfeccionado el arte de combinar la robustez de la ingeniería con la elegancia del diseño moderno.",
-        priority: "High",
-        icon: "architecture"
-    },
-    {
-        title: "Visión de Futuro",
-        content: "Nuestra misión es simple pero ambiciosa: ofrecer soluciones inmobiliarias que trasciendan generaciones, garantizando plusvalía y seguridad en cada metro cuadrado que desarrollamos.",
-        priority: "Normal",
-        icon: "trending_up"
-    }
-];
+// Narrativa Editorial (FILOSOFÍA DIFERENTE AL HERO)
+const ethosBlocks = homeData.ethos;
 ---
 
 <AdminLayout title="Identidad Ethos">
@@ -38,10 +17,10 @@ const ethosBlocks = [
     <div class="max-w-6xl mx-auto pb-20">
         
         <!-- Header: Manrope Display -->
-        <div class="flex flex-col md:flex-row items-baseline justify-between mb-16 gap-8">
+        <div class="flex flex-col md:flex-row items-baseline justify-between mb-16 gap-8 px-4 lg:px-0">
             <div>
                 <p class="text-[#041627] font-black tracking-[0.4em] text-[10px] uppercase mb-4 opacity-50">Narrativa de Marca</p>
-                <h1 class="text-6xl font-heading font-black text-[#041627] tracking-tighter italic leading-none">Gestor Home</h1>
+                <h1 class="text-6xl font-heading font-black text-[#041627] tracking-tighter italic leading-none">Gestor de Contenido</h1>
             </div>
             <div class="flex gap-6">
                 <button class="bg-[#006d37] text-white px-10 py-4 rounded-[0.75rem] font-black text-[11px] uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-emerald-900/10">
@@ -51,67 +30,80 @@ const ethosBlocks = [
         </div>
 
         <!-- Secondary Nav (Sub-secciones) -->
-        <div class="flex gap-10 border-b border-[#041627]/5 mb-16 overflow-x-auto no-scrollbar">
+        <div class="flex gap-10 border-b border-[#041627]/5 mb-16 overflow-x-auto no-scrollbar px-4 lg:px-0">
             <a href="#hero" class="pb-6 border-b-2 border-[#041627] text-[#041627] text-[10px] font-black uppercase tracking-widest whitespace-nowrap">01. Hero Portada</a>
-            <a href="#ethos" class="pb-6 border-b-2 border-transparent text-[#041627]/30 hover:text-[#041627] text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all">02. Identidad Ethos</a>
-            <a href="#stats" class="pb-6 border-b-2 border-transparent text-[#041627]/30 hover:text-[#041627] text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all">03. Métricas Impacto</a>
+            <a href="#ethos" class="pb-6 border-b-2 border-transparent text-[#041627]/30 hover:text-[#041627] text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all">02. Filosofía Ethos</a>
+            <a href="#stats" class="pb-6 border-b-2 border-transparent text-[#041627]/30 hover:text-[#041627] text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all">03. Métricas</a>
         </div>
 
         <!-- SECTION 01: HERO PORTADA -->
-        <section id="hero" class="mb-32">
+        <section id="hero" class="mb-32 animate-fade-in px-4 lg:px-0">
             <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#041627]/30 mb-10 flex items-center gap-4">
                 <span class="w-8 h-px bg-[#041627]/20"></span>
-                Configuración del Hero (Pantalla Inicial)
+                Configuración del Hero Principal
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div class="space-y-8 bg-white p-12 rounded-[2.5rem]">
-                    <div class="space-y-4">
-                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Etiqueta Superior (Badge)</label>
-                        <input type="text" value={homeHero.badge} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-sm font-bold text-[#041627] outline-none" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Badge Superior</label>
+                            <input type="text" value={homeHero.badge} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-sm font-bold text-[#041627] outline-none" />
+                        </div>
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Título Portada</label>
+                            <input type="text" value={homeHero.title} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-sm font-bold text-[#041627] outline-none" />
+                        </div>
                     </div>
                     <div class="space-y-4">
-                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Título Principal (Headline)</label>
-                        <input type="text" value={homeHero.title} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-2xl font-heading font-black text-[#041627] italic outline-none" />
-                    </div>
-                    <div class="space-y-4">
-                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Subtítulo de Soporte</label>
+                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Cuerpo del Mensaje (Slogan)</label>
                         <textarea rows="3" class="w-full bg-[#f2f4f6] border-none rounded-[1rem] py-4 px-6 text-sm font-medium text-[#44474c] leading-relaxed outline-none">{homeHero.subtitle}</textarea>
                     </div>
-                    <div class="space-y-4">
-                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">URL del Video de Fondo</label>
-                        <input type="text" value={homeHero.backgroundUrl} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-xs font-mono text-[#006d37] outline-none" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-slate-50">
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Imagen de Fondo (Default)</label>
+                            <div class="flex gap-2">
+                                <input type="text" value={homeHero.imageUrl} class="flex-1 bg-[#f2f4f6] border-none rounded-xl py-4 px-6 text-[10px] font-mono text-[#006d37] outline-none" />
+                                <button class="w-12 h-12 rounded-xl bg-[#041627] text-white flex items-center justify-center"><span class="material-symbols-outlined text-lg">image</span></button>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Video (Opcional)</label>
+                            <div class="flex gap-2">
+                                <input type="text" placeholder="URL .mp4" value={homeHero.videoUrl} class="flex-1 bg-[#f2f4f6] border-none rounded-xl py-4 px-6 text-[10px] font-mono text-slate-400 outline-none" />
+                                <button class="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center"><span class="material-symbols-outlined text-lg">videocam</span></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-[#041627] rounded-[2.5rem] p-1 items-center justify-center overflow-hidden relative border-[8px] border-white shadow-2xl">
                     <div class="absolute inset-0 bg-black/40 z-10"></div>
                     <div class="relative z-20 p-12 text-center h-full flex flex-col justify-center">
-                        <span class="text-[9px] font-bold text-white uppercase tracking-[0.4em] mb-4 bg-white/20 inline-block px-4 py-1.5 rounded-full">{homeHero.badge}</span>
+                        <span class="text-[9px] font-bold text-white uppercase tracking-[0.4em] mb-4 bg-[#006d37] inline-block px-4 py-1.5 rounded-full">{homeHero.badge}</span>
                         <h4 class="text-4xl font-heading font-black text-white italic leading-tight mb-4">{homeHero.title}</h4>
-                        <p class="text-[10px] text-white/60 font-medium max-w-xs mx-auto uppercase tracking-widest leading-loose">Visualización Real-Time</p>
+                        <p class="text-[10px] text-white/60 font-medium max-w-xs mx-auto uppercase tracking-[0.2em] leading-loose">Previsualización del Hero</p>
                     </div>
-                    <!-- Mock video background -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900 via-[#041627] to-slate-900 flex items-center justify-center">
-                         <span class="material-symbols-outlined text-white/5 text-9xl">play_circle</span>
+                    <div class="absolute inset-0 bg-[#041627] flex items-center justify-center">
+                         <img src="https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover opacity-30" />
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 02: IDENTIDAD ETHOS (EXISTING MOVED) -->
-        <section id="ethos" class="mb-32">
+        <!-- SECTION 02: IDENTIDAD ETHOS -->
+        <section id="ethos" class="mb-32 px-4 lg:px-0">
             <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#041627]/30 mb-10 flex items-center gap-4">
                 <span class="w-8 h-px bg-[#041627]/20"></span>
-                Manifiesto de Marca (Sección Filosofía)
+                Manifiesto Editorial (Filosofía Corporativa)
             </h3>
 
             <!-- Preview Card -->
-            <div class="bg-[#f2f4f6] rounded-[2.5rem] p-16 mb-16 relative overflow-hidden group">
+            <div class="bg-[#f2f4f6] rounded-[2.5rem] p-16 mb-16 relative overflow-hidden group border border-transparent hover:border-[#041627]/5 transition-all">
                 <div class="relative z-10 grid grid-cols-12 gap-12 items-center">
                     <div class="col-span-12 lg:col-span-7">
                         <span class="text-[11px] font-black text-[#006d37] uppercase tracking-[0.4em] mb-6 block">Nuestra Ética</span>
-                        <h2 class="text-5xl font-heading font-black text-[#041627] leading-[0.9] tracking-tighter mb-8 italic">
+                        <h2 class="text-5xl font-heading font-black text-[#041627] leading-[0.9] tracking-tighter mb-8 italic italic-bold">
                             {ethosBlocks[0].title}
                         </h2>
                         <p class="text-lg text-[#44474c] font-medium leading-relaxed max-w-lg">
@@ -120,7 +112,7 @@ const ethosBlocks = [
                     </div>
                     <div class="hidden lg:block col-span-5">
                          <div class="aspect-[4/5] bg-white rounded-[2rem] shadow-[0_40px_100px_rgba(4,22,39,0.06)] overflow-hidden relative translate-x-12 group-hover:translate-x-8 transition-transform duration-1000">
-                            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale" />
+                            <img src="https://images.unsplash.com/photo-1579309401309-42c161972848?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale brightness-110" />
                          </div>
                     </div>
                 </div>
@@ -131,19 +123,27 @@ const ethosBlocks = [
                 {ethosBlocks.map((block, i) => (
                     <div class="bg-white p-12 rounded-[2rem] group hover:shadow-[0_40px_100px_rgba(4,22,39,0.08)] transition-all duration-700">
                         <div class="flex flex-col lg:flex-row gap-16">
-                            <span class="text-6xl font-heading font-black text-[#f2f4f6] leading-none select-none shrink-0">0{i + 1}</span>
+                            <span class="text-6xl font-heading font-black text-[#f2f4f6] leading-none select-none shrink-0 group-hover:text-[#041627]/5 transition-colors">0{i + 1}</span>
                             <div class="flex-1 space-y-10">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                                     <div class="space-y-4">
-                                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Título Filosofía</label>
-                                        <input type="text" value={block.title} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-lg font-heading font-black text-[#041627] italic outline-none" />
+                                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Frase Destacada</label>
+                                        <input type="text" value={block.title} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-2xl font-heading font-black text-[#041627] italic outline-none" />
                                     </div>
                                     <div class="space-y-4">
-                                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Icono</label>
-                                        <input type="text" value={block.icon} class="w-full bg-[#f2f4f6] border-none rounded-[0.75rem] py-4 px-6 text-sm font-bold text-[#041627] outline-none" />
+                                        <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Icono Visual</label>
+                                        <div class="flex gap-3">
+                                            <div class="w-14 h-14 bg-[#f2f4f6] rounded-xl flex items-center justify-center text-[#041627]">
+                                                <span class="material-symbols-outlined text-2xl">{block.icon}</span>
+                                            </div>
+                                            <input type="text" value={block.icon} class="flex-1 bg-[#f2f4f6] border-none rounded-xl py-4 px-6 text-xs font-bold text-[#041627] outline-none" />
+                                        </div>
                                     </div>
                                 </div>
-                                <textarea rows="3" class="w-full bg-[#f2f4f6] border-none rounded-[1rem] py-6 px-8 text-[15px] font-medium text-[#44474c] leading-relaxed outline-none">{block.content}</textarea>
+                                <div class="space-y-4">
+                                    <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-[#041627]/40 ml-1">Cuerpo Narrativo</label>
+                                    <textarea rows="4" class="w-full bg-[#f2f4f6] border-none rounded-[1rem] py-6 px-8 text-[15px] font-medium text-[#44474c] leading-relaxed outline-none focus:ring-1 focus:ring-[#041627] transition-all">{block.content}</textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -152,29 +152,29 @@ const ethosBlocks = [
         </section>
 
         <!-- SECTION 03: IMPACT STATS -->
-        <section id="stats">
+        <section id="stats" class="px-4 lg:px-0">
             <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-[#041627]/30 mb-10 flex items-center gap-4">
                 <span class="w-8 h-px bg-[#041627]/20"></span>
-                Métricas de Impacto en Números
+                Diferenciadores en Números (Impacto)
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {impactStats.map(stat => (
-                    <div class="bg-white p-10 rounded-[2.5rem] group hover:shadow-2xl transition-all duration-500">
-                        <div class="flex items-center gap-4 mb-8">
-                            <div class="w-12 h-12 rounded-xl bg-[#f2f4f6] flex items-center justify-center text-[#041627]">
-                                <span class="material-symbols-outlined">{stat.icon}</span>
+                    <div class="bg-white p-10 rounded-[2.5rem] group hover:shadow-[0_40px_100px_rgba(4,22,39,0.06)] transition-all duration-500">
+                        <div class="flex items-center gap-4 mb-10">
+                            <div class="w-14 h-14 rounded-2xl bg-[#f2f4f6] flex items-center justify-center text-[#041627] group-hover:bg-[#006d37] group-hover:text-white transition-all duration-500">
+                                <span class="material-symbols-outlined text-2xl">{stat.icon}</span>
                             </div>
-                            <span class="text-[9px] font-black text-[#041627]/30 uppercase tracking-[0.2em]">Dato Estadístico</span>
+                            <span class="text-[9px] font-black text-[#041627]/20 uppercase tracking-[0.3em]">Stats Panel</span>
                         </div>
-                        <div class="space-y-6">
-                            <div class="space-y-2">
-                                <label class="block text-[10px] font-black uppercase tracking-widest text-[#041627]/30">Valor Destacado</label>
-                                <input type="text" value={stat.value} class="w-full bg-[#f2f4f6] border-none rounded-xl py-4 px-6 text-4xl font-heading font-black text-[#006d37] outline-none" />
+                        <div class="space-y-8">
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black uppercase tracking-widest text-[#041627]/30 ml-1">Métrica</label>
+                                <input type="text" value={stat.value} class="w-full bg-[#f2f4f6] border-none rounded-2xl py-5 px-6 text-5xl font-heading font-black text-[#041627] outline-none" />
                             </div>
-                            <div class="space-y-2">
-                                <label class="block text-[10px] font-black uppercase tracking-widest text-[#041627]/30">Etiqueta Descriptiva</label>
-                                <input type="text" value={stat.label} class="w-full bg-[#f2f4f6] border-none rounded-xl py-3 px-6 text-[10px] font-bold text-[#041627] uppercase tracking-[0.2em] outline-none" />
+                            <div class="space-y-3">
+                                <label class="block text-[10px] font-black uppercase tracking-widest text-[#041627]/30 ml-1">Label</label>
+                                <input type="text" value={stat.label} class="w-full bg-[#f2f4f6] border-none rounded-xl py-4 px-6 text-[10px] font-bold text-[#041627] uppercase tracking-[0.3em] outline-none" />
                             </div>
                         </div>
                     </div>

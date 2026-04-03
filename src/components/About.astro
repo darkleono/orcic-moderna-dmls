@@ -1,4 +1,5 @@
 ---
+import homeData from '/src/data/homeData.json';
 ---
 <section id="nosotros" class="py-24 bg-white overflow-hidden">
     <div class="container mx-auto px-6">
@@ -11,28 +12,24 @@
                 </div>
                 
                 <h2 class="text-5xl lg:text-6xl font-black font-['Manrope'] text-slate-900 leading-[1.1] mb-8">
-                    Tu Legado, <br/>
-                    <span class="text-orcic-blue italic">Nuestra Ingeniería.</span>
+                    <Fragment set:html={homeData.ethos[1].title.replace(', ', ', <br/>')} />
                 </h2>
                 
                 <div class="space-y-6 text-slate-600 text-lg leading-relaxed font-medium">
                     <p>
-                        En <span class="font-bold text-slate-900">ORCIC</span>, no solo construimos estructuras; forjamos el escenario donde se desarrolla tu futuro. Con décadas de experiencia en el sector industrial y residencial, hemos perfeccionado el arte de combinar la robustez de la ingeniería con la elegancia del diseño moderno.
-                    </p>
-                    <p>
-                        Nuestra misión es simple pero ambiciosa: ofrecer soluciones inmobiliarias que trasciendan generaciones, garantizando plusvalía y seguridad en cada metro cuadrado que desarrollamos.
+                        {homeData.ethos[1].content}
                     </p>
                 </div>
 
                 <div class="mt-12 flex flex-wrap gap-8">
                     <div class="flex flex-col">
-                        <span class="text-4xl font-black text-orcic-blue leading-none">20+</span>
-                        <span class="text-[10px] uppercase font-bold tracking-widest text-slate-400 mt-2">Años de Trayectoria</span>
+                        <span class="text-4xl font-black text-orcic-blue leading-none">{homeData.stats[0].value}</span>
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-slate-400 mt-2">{homeData.stats[0].label}</span>
                     </div>
                     <div class="w-px h-12 bg-slate-100 hidden sm:block"></div>
                     <div class="flex flex-col">
-                        <span class="text-4xl font-black text-orcic-blue leading-none">500+</span>
-                        <span class="text-[10px] uppercase font-bold tracking-widest text-slate-400 mt-2">Proyectos Entregados</span>
+                        <span class="text-4xl font-black text-orcic-blue leading-none">{homeData.stats[1].value}</span>
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-slate-400 mt-2">{homeData.stats[1].label}</span>
                     </div>
                 </div>
             </div>
@@ -57,10 +54,12 @@
                         <div class="flex items-center gap-5">
                             <button id="ctrl-play" class="text-white hover:text-orcic-blue transition-all flex items-center drop-shadow-md">
                                 <span class="material-symbols-outlined fill-current text-2xl" id="play-icon-main">play_arrow</span>
+                                <span class="material-symbols-outlined fill-current text-2xl hidden" id="pause-icon-main">pause</span>
                             </button>
                             <div class="h-4 w-px bg-white/10"></div>
                             <button id="ctrl-volume" class="text-white hover:text-orcic-blue transition-all flex items-center drop-shadow-md">
-                                <span class="material-symbols-outlined text-2xl" id="volume-icon">volume_off</span>
+                                <span class="material-symbols-outlined text-2xl" id="vol-off-icon">volume_off</span>
+                                <span class="material-symbols-outlined text-2xl hidden" id="vol-on-icon">volume_up</span>
                             </button>
                         </div>
                         
@@ -75,6 +74,7 @@
                     <div id="video-click-overlay" class="absolute inset-0 flex items-center justify-center cursor-pointer z-20 transition-all duration-500">
                         <div id="center-btn" class="w-20 h-20 bg-orcic-navy/20 backdrop-blur-2xl rounded-full flex items-center justify-center border border-white/20 scale-90 opacity-0 transition-all duration-500 shadow-xl">
                              <span id="center-play-icon" class="material-symbols-outlined text-white text-4xl fill-current drop-shadow-lg">play_arrow</span>
+                             <span id="center-pause-icon" class="material-symbols-outlined text-white text-4xl fill-current drop-shadow-lg hidden">pause</span>
                         </div>
                     </div>
                 </div>
@@ -92,12 +92,18 @@
     const video = document.getElementById('video-about') as HTMLVideoElement;
     const container = document.getElementById('video-container');
     const controls = document.getElementById('video-controls');
-    const playBtn = document.getElementById('ctrl-play');
+    
+    // Icons
     const playIcon = document.getElementById('play-icon-main');
+    const pauseIcon = document.getElementById('pause-icon-main');
+    const centerPlayIcon = document.getElementById('center-play-icon');
+    const centerPauseIcon = document.getElementById('center-pause-icon');
+    const volOffIcon = document.getElementById('vol-off-icon');
+    const volOnIcon = document.getElementById('vol-on-icon');
+
+    const playBtn = document.getElementById('ctrl-play');
     const centerBtn = document.getElementById('center-btn');
-    const centerIcon = document.getElementById('center-play-icon');
     const volumeBtn = document.getElementById('ctrl-volume');
-    const volumeIcon = document.getElementById('volume-icon');
     const fullscreenBtn = document.getElementById('ctrl-fullscreen');
     const clickOverlay = document.getElementById('video-click-overlay');
 
@@ -111,10 +117,7 @@
         const showControls = () => {
             controls.classList.remove('opacity-0');
             controls.classList.add('opacity-100');
-            
             clearTimeout(hideTimeout);
-            
-            // Solo auto-ocultar si el video está reproduciéndose
             if (!video.paused) {
                 hideTimeout = window.setTimeout(() => {
                     controls.classList.add('opacity-0');
@@ -126,49 +129,46 @@
         container.addEventListener('mousemove', showControls);
         container.addEventListener('mouseenter', showControls);
 
-        // 1. Intersection Observer para Autoplay cuando se ve
+        // 1. Intersection Observer con Bloqueo de Re-entrada
+        let isProcessing = false;
         const observer = new IntersectionObserver((entries) => {
+            if (isProcessing) return;
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    if (loopCount < maxLoops) {
-                        video.play().catch(() => console.log("Playback prevented by browser"));
+                    if (loopCount < maxLoops && video.paused) {
+                        isProcessing = true;
+                        video.play().finally(() => { isProcessing = false; });
                     }
                 } else {
-                    video.pause();
+                    if (!video.paused) video.pause();
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.1 });
 
         observer.observe(video);
 
-        // 2. Play / Pause Logic
+        // 2. Play / Pause Logic (Usando clases, evitar mutación de texto)
         const togglePlay = () => {
-            if (video.paused) {
-                video.play();
-                updateUIState(true);
-                showControls();
-            } else {
-                video.pause();
-                updateUIState(false);
-                showControls();
-            }
+            if (video.paused) video.play();
+            else video.pause();
+            showControls();
         };
 
         const updateUIState = (playing: boolean) => {
+            // Toggle de iconos sin mutar texto (evita Reflow)
             if (playing) {
-                if (playIcon) playIcon.innerText = 'pause';
-                if (centerIcon) centerIcon.innerText = 'pause';
-                if (centerBtn) {
-                    centerBtn.classList.add('opacity-0', 'scale-110');
-                    centerBtn.classList.remove('opacity-100', 'scale-90');
-                }
+                playIcon?.classList.add('hidden');
+                pauseIcon?.classList.remove('hidden');
+                centerPlayIcon?.classList.add('hidden');
+                centerPauseIcon?.classList.remove('hidden');
+                centerBtn?.classList.add('opacity-0', 'scale-110');
             } else {
-                if (playIcon) playIcon.innerText = 'play_arrow';
-                if (centerIcon) centerIcon.innerText = 'play_arrow';
-                if (centerBtn) {
-                    centerBtn.classList.remove('opacity-0', 'scale-110');
-                    centerBtn.classList.add('opacity-100', 'scale-90');
-                }
+                playIcon?.classList.remove('hidden');
+                pauseIcon?.classList.add('hidden');
+                centerPlayIcon?.classList.remove('hidden');
+                centerPauseIcon?.classList.add('hidden');
+                centerBtn?.classList.remove('opacity-0', 'scale-110');
+                centerBtn?.classList.add('opacity-100', 'scale-90');
             }
         };
 
@@ -178,12 +178,16 @@
         });
         clickOverlay?.addEventListener('click', togglePlay);
 
-        // 3. Volume Control
+        // 3. Volume Control (Usando clases, evitar mutación de texto)
         volumeBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
             video.muted = !video.muted;
-            if (volumeIcon) {
-                volumeIcon.innerText = video.muted ? 'volume_off' : 'volume_up';
+            if (video.muted) {
+                volOffIcon?.classList.remove('hidden');
+                volOnIcon?.classList.add('hidden');
+            } else {
+                volOffIcon?.classList.add('hidden');
+                volOnIcon?.classList.remove('hidden');
             }
             showControls();
         });

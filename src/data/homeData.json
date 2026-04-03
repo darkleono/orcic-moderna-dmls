@@ -1,0 +1,34 @@
+{
+  "hero": {
+    "badge": "Líderes en Consorcio Industrial",
+    "title": "Infraestructura, <br/> <span class=\"text-orcic-blue\">que Trasciende.</span>",
+    "subtitle": "Desarrollamos espacios integrales de alta ingeniería que potencian el crecimiento industrial y la calidad de vida en el sureste mexicano.",
+    "imageUrl": "/home_mediterraneo_izq.webp",
+    "videoUrl": ""
+  },
+  "stats": [
+    { "label": "Trayectoria en el Sureste", "value": "20+", "icon": "history_edu" },
+    { "label": "Proyectos Entregados", "value": "500+", "icon": "done_all" },
+    { "label": "Hectáreas Desarrolladas", "value": "1,200", "icon": "landscape" }
+  ],
+  "ethos": [
+    {
+      "title": "Ingeniería de Precisión",
+      "content": "Nuestra metodología constructiva combina la robustez técnica con la eficiencia operativa. En cada nave industrial y desarrollo residencial, aplicamos estándares internacionales de seguridad y sostenibilidad.",
+      "priority": "High",
+      "icon": "architecture"
+    },
+    {
+      "title": "Tu Legado, Nuestra Ingeniería",
+      "content": "Más de dos décadas de honestidad y cumplimiento nos respaldan. No solo construimos paredes; edificamos relaciones de confianza a largo plazo con inversionistas y familias.",
+      "priority": "Normal",
+      "icon": "verified_user"
+    },
+    {
+      "title": "Nuestra Misión",
+      "content": "Facilitar el crecimiento patrimonial de nuestros clientes mediante desarrollos inmobiliarios seguros, con alto retorno de inversión y ubicaciones estratégicas.",
+      "priority": "Low",
+      "icon": "trending_up"
+    }
+  ]
+}
