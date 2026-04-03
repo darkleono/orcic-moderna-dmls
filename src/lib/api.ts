@@ -3,7 +3,15 @@
  * Centraliza la comunicación con el PHP Bridge.
  */
 
-const API_URL = `${import.meta.env.BASE_URL}/bridge.php`.replace('//', '/');
+const isServer = typeof window === 'undefined';
+
+// Automatizamos la URL: 
+// En el servidor (Build) = Usa el dominio + carpeta del config.
+// En el navegador = Usa solo la ruta relativa.
+const API_URL = isServer 
+    ? `${import.meta.env.SITE}${import.meta.env.BASE_URL}/bridge.php`.replace(/([^:]\/)\/+/g, "$1") 
+    : `${import.meta.env.BASE_URL}/bridge.php`.replace(/\/+/g, '/');
+
 const API_TOKEN = 'ORCIC_BRIDGE_TOKEN_2026_X1';
 
 // Definición de Interfaces (Tipado)
@@ -30,7 +38,11 @@ export async function fetchProperties(): Promise<Property[]> {
             }
         });
 
-        if (!response.ok) throw new Error('Error al conectar con el puente de datos');
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`API Error [${response.status}]:`, errorText);
+            throw new Error(`Error al conectar con el puente de datos (${response.status})`);
+        }
         
         return await response.json();
     } catch (error) {

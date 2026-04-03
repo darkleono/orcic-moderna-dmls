@@ -34,8 +34,8 @@ import homeData from '/src/data/homeData.json';
     <header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl border-b border-at-outline/20 duration-300">
         <div class="flex items-center justify-between px-8 h-20 max-w-7xl mx-auto">
             <div class="flex items-center gap-16">
-                <a class="flex items-center group" href="/">
-                    <img src="/logo_orcic.png" alt="ORCIC" class="h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105" fetchpriority="high" loading="eager" />
+                <a class="flex items-center group" href={import.meta.env.BASE_URL}>
+                    <img src={`${import.meta.env.BASE_URL}/logo_orcic.png`.replace('//', '/')} alt="ORCIC" class="h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105" fetchpriority="high" loading="eager" />
                 </a>
                 <nav class="hidden lg:flex items-center space-x-12">
                     <a class="text-orcic-navy-deep font-bold border-b-2 border-orcic-navy font-heading text-xs uppercase tracking-[0.2em] transition-all" href="#catalog">Propiedades</a>
@@ -58,7 +58,7 @@ import homeData from '/src/data/homeData.json';
 			<div class="absolute inset-0 z-0">
 				<img 
                     class="w-full h-full object-cover origin-center" 
-                    src={homeData.hero.imageUrl} 
+                    src={homeData.hero.imageUrl.startsWith('http') ? homeData.hero.imageUrl : `${import.meta.env.BASE_URL}${homeData.hero.imageUrl}`.replace('//', '/')} 
                     alt="Mediterráneo Residencial - ORCIC"
                     loading="eager"
                     fetchpriority="high"
@@ -205,7 +205,7 @@ import homeData from '/src/data/homeData.json';
         <div class="max-w-7xl mx-auto px-8 py-32">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-x-16 gap-y-20 mb-28">
                 <div class="md:col-span-5">
-                    <img src="/logo_orcic.png" alt="ORCIC" class="h-16 w-auto object-contain mb-10 brightness-0 invert" loading="lazy" />
+                    <img src={`${import.meta.env.BASE_URL}/logo_orcic.png`.replace('//', '/')} alt="ORCIC" class="h-16 w-auto object-contain mb-10 brightness-0 invert" loading="lazy" />
                     <p class="text-white/60 max-w-sm mb-12 leading-relaxed font-medium text-lg">Lideramos el mercado de bienes raíces industriales y de lujo con un enfoque en ingeniería, integridad y resultados excepcionales en todo México.</p>
                     <div class="flex gap-4">
                         <a href="#" class="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center text-white border border-white/10 hover:bg-white hover:text-orcic-navy-deep transition-all shadow-at-ambient"><span class="material-symbols-outlined">share</span></a>

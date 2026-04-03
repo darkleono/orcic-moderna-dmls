@@ -15,10 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 // CONFIGURACIÓN (Extraída de tu .env)
-$host = "127.0.0.1";
-$db   = "gruporti_orcic";
-$user = "gruporti_orcic";
-$pass = "q9W3q$PKCyy.";
+$host = 'localhost';
+$db   = 'gruporti_orcic';
+$user = 'gruporti_orcic';
+$pass = 'q9W3q$PKCyy.';
 $charset = 'utf8mb4';
 
 // SEGURIDAD: Token de Acceso
